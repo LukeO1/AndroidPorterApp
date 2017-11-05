@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "741418331527",
+    "firebase_url": "https://porterapp-3178d.firebaseio.com",
+    "project_id": "porterapp-3178d",
+    "storage_bucket": "porterapp-3178d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741418331527:android:4627a8f39d744534",
+        "android_client_info": {
+          "package_name": "com.example.lucas.porterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741418331527-m81nukc0d48a1qjm35rtbtra3mpm8hbb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lucas.porterapp",
+            "certificate_hash": "5247cc3d43f59ef9688d177dcbb2d019030e7781"
+          }
+        },
+        {
+          "client_id": "741418331527-onm45se837po5m4ibir0oeglml227huc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7zyufqskKSyCHZbpZXS_ZMXSM0K5LBAc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741418331527-onm45se837po5m4ibir0oeglml227huc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
