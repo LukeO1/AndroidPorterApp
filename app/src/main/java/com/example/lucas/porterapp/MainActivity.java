@@ -1,17 +1,20 @@
 package com.example.lucas.porterapp;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -22,19 +25,24 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+
+    private TextView barcodeResult;
+
+    // ---------------------------------------------------------------------------------------------
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mEmail = (EditText)findViewById(R.id.emailField);
-        mPassword = (EditText)findViewById(R.id.passwordField);
-        mLogin = (Button)findViewById(R.id.login);
+        mEmail = (EditText) findViewById(R.id.emailField);
+        mPassword = (EditText) findViewById(R.id.passwordField);
+        mLogin = (Button) findViewById(R.id.login);
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null){
+                if (firebaseAuth.getCurrentUser() != null) {
                     startActivity(new Intent(MainActivity.this, Tasklist.class));
                     finish();
                 }
@@ -47,11 +55,21 @@ public class MainActivity extends AppCompatActivity {
                 startSignIn();
             }
         });
+
+
+        barcodeResult = (TextView) findViewById(R.id.txtContent);
     }
+
+    // ---------------------------------------------------------------------------------------------
+
+    @Override
     protected void onStart(){
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
+
+    // ---------------------------------------------------------------------------------------------
+
     private void startSignIn(){
         String email = mEmail.getText().toString();
         String password =mPassword.getText().toString();
@@ -72,4 +90,37 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
+    // ---------------------------------------------------------------------------------------------
+
+    // called to initiate the barcode scanning
+    public void scanBarcode(View v) {
+        Intent intent = new Intent(this, BarcodeScanner.class);
+
+        // receives the result from the BarcodeScanner activity
+        startActivityForResult(intent, 0);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    // get the result of the barcode back rom the BarcodeScanner
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 0){
+            if(resultCode == CommonStatusCodes.SUCCESS){
+                if(data!=null){
+                    Barcode barcode = data.getParcelableExtra("barcode");
+                    barcodeResult.setText("Barcode: " + barcode.displayValue);
+                }else{
+                    barcodeResult.setText("No barcode detected from camera");
+                }
+            }
+        }
+
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
 }
