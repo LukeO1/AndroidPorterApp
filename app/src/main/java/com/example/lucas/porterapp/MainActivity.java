@@ -123,4 +123,10 @@ public class MainActivity extends AppCompatActivity {
 
     // ---------------------------------------------------------------------------------------------
 
+    public void contactList(View v){
+        Intent intent = new Intent(this, PhoneDirectory.class);
+
+        startActivity(intent);
+    }
+
 }

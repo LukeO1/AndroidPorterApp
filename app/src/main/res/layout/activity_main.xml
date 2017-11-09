@@ -65,4 +65,13 @@
         android:layout_marginBottom="26dp"
         android:text="Temporary barcode value" />
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/openScannerButton"
+        android:layout_alignParentBottom="true"
+        android:onClick="contactList"
+        android:text="Contact" />
+
 </RelativeLayout>

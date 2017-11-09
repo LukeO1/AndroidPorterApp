@@ -60,6 +60,7 @@ public class BarcodeScanner extends AppCompatActivity {
                 try {
                     // check that camera permission is granted
                     if (ActivityCompat.checkSelfPermission(BarcodeScanner.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        //request permission if not already granted
                         ActivityCompat.requestPermissions(BarcodeScanner.this, new String[] {android.Manifest.permission.CAMERA}, CAMERA_PERMISSIONS_REQUEST);
                     }
                         // start the camera in the SurfaceView scanner
