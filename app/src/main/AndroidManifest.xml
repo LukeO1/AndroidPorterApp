@@ -39,6 +39,7 @@
 
         <activity android:name=".BarcodeScanner" />
         <activity android:name=".PhoneDirectory"></activity>
+        <activity android:name=".personalScreenActivity"></activity>
     </application>
 
 </manifest>

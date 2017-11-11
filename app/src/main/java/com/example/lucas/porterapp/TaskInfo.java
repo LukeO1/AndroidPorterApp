@@ -1,26 +1,45 @@
 package com.example.lucas.porterapp;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class TaskInfo {
 
+/**
+ * TaskInfo class stores worklist data in TaskInfo Object
+ */
+public class TaskInfo implements Serializable {
+
+    private String taskID;
     private String destination;
     private String patientName;
     private String ward;
     private int priority;
     private String timeStamp;
     private String minutes;
+    private String inProgress;
+    private String inProgressSince;
 
     public TaskInfo() {
     }
 
-    public TaskInfo(String destination, String patientName, String ward, int priority, String timeStamp) {
+    public TaskInfo(String taskID, String destination, String patientName, String ward, int priority, String timeStamp, String inProgress, String inProgressSince) {
+        this.taskID = taskID;
         this.destination = destination;
         this.patientName = patientName;
         this.ward = ward;
         this.priority = priority;
         this.timeStamp = timeStamp;
+        this.inProgress = inProgress;
+        this.inProgressSince = inProgressSince;
+    }
+
+    public String getTaskID(){
+        return taskID;
+    }
+
+    public void setTaskID(String taskID){
+        this.taskID = taskID;
     }
 
     public String getDestination() {
@@ -57,7 +76,11 @@ public class TaskInfo {
     }
 
     public String getTimeStamp(){
+        return timeStamp;
 
+    }
+
+    public String getMinutes(){
         try{
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
             Date currentTimeStamp = new Date();
@@ -76,4 +99,19 @@ public class TaskInfo {
         this.timeStamp = timeStamp;
     }
 
+    public String getInProgress(){
+        return inProgress;
+    }
+
+    public void setInProgress(String inProgress){
+        this.inProgress = inProgress;
+    }
+
+    public String getInProgressSince(){
+        return inProgressSince;
+    }
+
+    public void setInProgressSince(String inProgressSince){
+        this.inProgressSince = inProgressSince;
+    }
 }
