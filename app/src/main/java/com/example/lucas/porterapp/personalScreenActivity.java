@@ -1,13 +1,21 @@
 package com.example.lucas.porterapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,24 +24,62 @@ import java.util.Date;
  */
 public class personalScreenActivity extends AppCompatActivity {
 
-    DatabaseHelper myDB;
-    ListView completedListView;
+    private DatabaseReference mRef;
+    private DatabaseHelper myDB;
+    private ListView completedListView;
+    private TaskInfo task;
+    private TextView InProgressTextView;
+    private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck";
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_screen);
 
-        String currentTime = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
 
         //Retrieve intent passed from TaskList activity, a WorkList object
         Intent i = getIntent();
-        TaskInfo task = (TaskInfo) i.getSerializableExtra("taskObject");
-//        Toast.makeText(this, "WORK!: " + task.getWard() + " "+ task.getDestination(), Toast.LENGTH_SHORT).show();
+        task = (TaskInfo) i.getSerializableExtra("taskObject");
 
         //Set Text to inProgress TextView
-        TextView InProgressTextView = (TextView) findViewById((R.id.InProgressTextView));
+        InProgressTextView = (TextView) findViewById((R.id.InProgressTextView));
         InProgressTextView.setText(task.getWard() +" "+ task.getPatientName() +" "+ task.getDestination());
+
+        //Create a SQLite database
+        myDB = new DatabaseHelper(this);
+
+        populateList();
+
+        Button confirmTaskButton = (Button) findViewById(R.id.confirmTaskButton);
+        confirmTaskButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                confirmTask(task);
+                InProgressTextView.setText("None in Progress");
+                mRef.child("Task 0").removeValue();
+
+                editStatus("false");
+                populateList();
+
+            }
+        });
+
+    }
+
+
+
+
+    public void editStatus(String status){
+
+        editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
+        editor.putString("checkSelected", status).apply();
+    }
+
+    public void confirmTask(TaskInfo task){
+
+        String currentTime = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 
         //Prepare data to be inserted into SqlDatabase
         String taskId = task.getTaskID();
@@ -44,22 +90,33 @@ public class personalScreenActivity extends AppCompatActivity {
         String timeStampCompleted = currentTime;
         String timeTaken = task.getMinutes();
 
-        //Create a SQLite database
-        myDB = new DatabaseHelper(this);
+//        myDB.deleteAll(); //Clear the DB
 
         //insert data into the DB
         boolean result = myDB.insertData(taskId, wardName, patientName, destination, timeStampCreated, timeStampCompleted,  timeTaken);
+    }
+
+    public void populateList(){
+
+        CursorAdapter adapter;
 
         // Populate the completed task list view using a custom adapter found at Cursor Adapter file
         completedListView = (ListView) findViewById(R.id.CompletedListView);
-        CursorAdapter adapter = new CursorAdapter(this, R.layout.row_layout_completed, myDB.createCursor(), 0 );
 
-        // Add header to the complete task list view
-        LayoutInflater myinflater = getLayoutInflater();
-        ViewGroup myHeader = (ViewGroup)myinflater.inflate(R.layout.completedlistview_header_layout, completedListView, false);
-        completedListView.addHeaderView(myHeader, null, false);
+        Cursor cursor = myDB.createCursor();
+        if(cursor != null)
+        {
+            adapter = new CursorAdapter(this, R.layout.row_layout_completed, myDB.createCursor(), 0 );
+            // Add header to the complete task list view
+//            LayoutInflater myinflater = getLayoutInflater();
+//            ViewGroup myHeader = (ViewGroup)myinflater.inflate(R.layout.completedlistview_header_layout, completedListView, false);
+//            completedListView.addHeaderView(myHeader, null, false);
 
-        completedListView.setAdapter(adapter);
+            completedListView.setAdapter(adapter);
+        } else {
+
+        }
+
 
     }
 

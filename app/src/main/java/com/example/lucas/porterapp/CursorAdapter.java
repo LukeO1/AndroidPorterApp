@@ -7,10 +7,6 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
 /**
- * Created by cindy on 11/11/2017.
- */
-
-/**
  * Custom adapter for populating completed task list view
  */
 public class CursorAdapter extends ResourceCursorAdapter {

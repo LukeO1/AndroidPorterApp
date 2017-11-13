@@ -89,7 +89,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_COMPLETED_TASKS, null); //Select all from db
 
-        return cursor;
+        if(cursor!=null && cursor.getCount()>0){
+            return cursor;
+        }
+        return null;
     }
 
 // -------------------------------------------------------------------------------------------------

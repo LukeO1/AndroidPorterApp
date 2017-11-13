@@ -1,5 +1,6 @@
 package com.example.lucas.porterapp;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,9 @@ public class Tasklist extends AppCompatActivity {
     private FirebaseListAdapter adapter;
     private LinearLayout subWorkListItem;
     private String itemKey;
-    private boolean checkSelected;
+    private boolean checkSelected = false;
+    private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck";
+    private SharedPreferences.Editor editor;
 
 
     @Override
@@ -35,11 +38,16 @@ public class Tasklist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasklist);
 
+        editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
+        editor.putString("checkSelected", checkSelected +"");
+        editor.apply();
+
         listView = (ListView)findViewById(R.id.listview_worklist);
 
         // Connection to Firebase
         mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
-        Query queryRef = mRef.orderByChild("priority"); // Order the list by priority
+        Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
+//        Query queryRef = mRef.orderByChild("priority"); // Order the list by priority
 
 //        populateDatabase(); //UnComment to populate the db with randomly generated tasks
 
@@ -66,7 +74,7 @@ public class Tasklist extends AppCompatActivity {
             public void onItemClick(final AdapterView<?> parent, View view,
                                     final int position, long id) {
 
-//          Toast.makeText(Tasklist.this, "Item clicked, position: "+ position, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Tasklist.this, "Item clicked, position: "+ position, Toast.LENGTH_SHORT).show();
             subWorkListItem = (LinearLayout) view.findViewById(R.id.subWorkListItem);
             toggleItem();
 
@@ -113,6 +121,8 @@ public class Tasklist extends AppCompatActivity {
                 //Changes DB inProgress value to yes and change checkSelected flag to true
                 mRef.child(itemKey).child("inProgress").setValue("YES");
                 checkSelected = true;
+                editor.putString("checkSelected", checkSelected +"");
+                editor.apply();
 
                 // Pass WorkList object to personalHomepage Activity
                 Intent i = new Intent(Tasklist.this, personalScreenActivity.class).
@@ -139,7 +149,7 @@ public class Tasklist extends AppCompatActivity {
     public void buttonOnClickNO(Button subWorkListButtonsNO, final int position){
         subWorkListButtonsNO.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                Toast.makeText(Tasklist.this, "ButtonNO: position: "+ position, Toast.LENGTH_SHORT).show();
+        //      Toast.makeText(Tasklist.this, "ButtonNO: position: "+ position, Toast.LENGTH_SHORT).show();
                 toggleItem(); //close the expanded item
 
             }
@@ -162,6 +172,22 @@ public class Tasklist extends AppCompatActivity {
         } });
     }
 
+// -------------------------------------------------------------------------------------------------
+
+    /**
+     * Check the variable stored in a shared preference file if the User has already accepted a Task
+     * @return true if User has alreadt accepted a task, false if not, or not found if file could
+     * not be found.
+     */
+    public String statusCheck(){
+        //Find shared preference file
+        SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
+
+        //Find value by key, checkSelected
+        String checkSelected = prefs.getString("checkSelected", "Not found");
+        return checkSelected;
+
+    }
 // -------------------------------------------------------------------------------------------------
     /**
      * Code to randomly generate work list tasks at random

@@ -20,13 +20,27 @@
             android:text="InProgress"
             android:textSize="24sp" />
 
+
         <TextView
             android:id="@+id/InProgressTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_marginBottom="10dp"/>
 
+        <Button
+            android:id="@+id/confirmTaskButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"/>
+
+        <TextView
+            android:id="@+id/CompletedListheader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Completed Tasks"
+            android:textSize="24sp" />
         <ListView
             android:id="@+id/CompletedListView"
             android:layout_width="match_parent"
