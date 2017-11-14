@@ -3,6 +3,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -28,19 +29,24 @@ public class Tasklist extends AppCompatActivity {
     private FirebaseListAdapter adapter;
     private LinearLayout subWorkListItem;
     private String itemKey;
-    private boolean checkSelected = false;
     private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck";
     private SharedPreferences.Editor editor;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasklist);
 
-        editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
-        editor.putString("checkSelected", checkSelected +"");
-        editor.apply();
+        SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
+        boolean checkFileExists = prefs.contains("checkSelected");
+
+        if(!checkFileExists){
+            editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
+            editor.putString("checkSelected", "false");
+            editor.apply();
+        }
 
         listView = (ListView)findViewById(R.id.listview_worklist);
 
@@ -117,11 +123,19 @@ public class Tasklist extends AppCompatActivity {
         subWorkListButtonsOK.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+            // Retrieve checkSelected flag from shared preference
+            SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
+            String getCheckSelected = prefs.getString("checkSelected", "Not found");
+            boolean checkSelected = Boolean.parseBoolean(getCheckSelected);
+
             if(!checkSelected){
-                //Changes DB inProgress value to yes and change checkSelected flag to true
+
+                // Changes DB inProgress value to yes
                 mRef.child(itemKey).child("inProgress").setValue("YES");
-                checkSelected = true;
-                editor.putString("checkSelected", checkSelected +"");
+
+                // Change checkSelected flag in shared preference to true
+                editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
+                editor.putString("checkSelected", "true");
                 editor.apply();
 
                 // Pass WorkList object to personalHomepage Activity

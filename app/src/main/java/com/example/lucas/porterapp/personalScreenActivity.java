@@ -69,8 +69,6 @@ public class personalScreenActivity extends AppCompatActivity {
     }
 
 
-
-
     public void editStatus(String status){
 
         editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
@@ -107,11 +105,6 @@ public class personalScreenActivity extends AppCompatActivity {
         if(cursor != null)
         {
             adapter = new CursorAdapter(this, R.layout.row_layout_completed, myDB.createCursor(), 0 );
-            // Add header to the complete task list view
-//            LayoutInflater myinflater = getLayoutInflater();
-//            ViewGroup myHeader = (ViewGroup)myinflater.inflate(R.layout.completedlistview_header_layout, completedListView, false);
-//            completedListView.addHeaderView(myHeader, null, false);
-
             completedListView.setAdapter(adapter);
         } else {
 
