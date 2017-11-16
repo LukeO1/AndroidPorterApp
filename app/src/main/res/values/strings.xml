@@ -10,4 +10,17 @@
     <string name="dialog_select_gallery">Gallery</string>
 
     <string name="image_picker_error">Something is wrong with that image. Pick a different one please.</string>
+
+
+    <string-array name="sort_by_array">
+    <item>Patient ID</item>
+    <item>Patient Name</item>
+    <item>Task ID</item>
+    <item>Destination</item>
+    <item>Task Creation Time</item>
+    <item>Completed Time</item>
+    <item>Task Duration</item>
+    </string-array>
+
+
 </resources>

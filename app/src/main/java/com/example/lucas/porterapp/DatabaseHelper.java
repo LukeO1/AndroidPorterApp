@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import java.util.ArrayList;
 
 /**
  * SQLite database helper class
@@ -84,10 +81,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
      * Query al data from the database and store in a cursor
      * @return
      */
-    public Cursor createCursor() {
+    public Cursor createCursor(String orderBy) {
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_COMPLETED_TASKS, null); //Select all from db
+        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_COMPLETED_TASKS + " ORDER BY " + orderBy + " DESC" , null); //Select all from db
 
         if(cursor!=null && cursor.getCount()>0){
             return cursor;
