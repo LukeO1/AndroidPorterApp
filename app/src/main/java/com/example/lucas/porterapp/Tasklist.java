@@ -1,9 +1,9 @@
 package com.example.lucas.porterapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -11,11 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,6 +40,7 @@ public class Tasklist extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasklist);
+        getSupportActionBar().setTitle("Work List");
 
         SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
         boolean checkFileExists = prefs.contains("checkSelected");
@@ -95,6 +98,16 @@ public class Tasklist extends AppCompatActivity {
             }
         });
 
+
+        FloatingActionButton openPersonalActivity = (FloatingActionButton) findViewById(R.id.openPersonalWorklist);
+        openPersonalActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Tasklist.this, PersonalScreenActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
 // -------------------------------------------------------------------------------------------------
@@ -139,7 +152,7 @@ public class Tasklist extends AppCompatActivity {
                 editor.apply();
 
                 // Pass WorkList object to personalHomepage Activity
-                Intent i = new Intent(Tasklist.this, personalScreenActivity.class).
+                Intent i = new Intent(Tasklist.this, PersonalScreenActivity.class).
                         putExtra("taskObject", taskInfo);
                 startActivity(i);
 
