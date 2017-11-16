@@ -1,6 +1,7 @@
 package com.example.lucas.porterapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +58,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        barcodeResult = (TextView) findViewById(R.id.txtContent);
+        Button callTechnicalSupport = (Button) findViewById(R.id.techSupportButton);
+        callTechnicalSupport.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                callTechnicalSupport(view);
+            }
+        });
+
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -123,9 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
     // ---------------------------------------------------------------------------------------------
 
-    public void contactList(View v){
-        Intent intent = new Intent(this, PhoneDirectory.class);
-
+    public void callTechnicalSupport(View v){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:011234567" ));
         startActivity(intent);
     }
 
