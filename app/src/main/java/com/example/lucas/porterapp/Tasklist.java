@@ -58,7 +58,7 @@ public class Tasklist extends AppCompatActivity {
         Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
 //        Query queryRef = mRef.orderByChild("priority"); // Order the list by priority
 
-//        populateDatabase(); //UnComment to populate the db with randomly generated tasks
+        populateDatabase(); //UnComment to populate the db with randomly generated tasks
 
         // Populate WorkList with task from DB
         adapter = new FirebaseListAdapter<TaskInfo>(this, TaskInfo.class, R.layout.row_layout, queryRef){
@@ -250,7 +250,10 @@ public class Tasklist extends AppCompatActivity {
             inProgress.setValue("NO");
 
             DatabaseReference inProgressSince = Task.child("inProgressSince"); //In progress Since Time
-            inProgressSince.setValue(time);
+            inProgressSince.setValue(0);
+
+            DatabaseReference userID = Task.child("userID"); //In progress Since Time
+            userID.setValue(0);
 
         }
     }
