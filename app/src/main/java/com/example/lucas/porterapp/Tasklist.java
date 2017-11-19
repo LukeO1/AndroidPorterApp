@@ -1,9 +1,13 @@
 package com.example.lucas.porterapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -58,7 +62,7 @@ public class Tasklist extends AppCompatActivity {
         Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
 //        Query queryRef = mRef.orderByChild("priority"); // Order the list by priority
 
-        populateDatabase(); //UnComment to populate the db with randomly generated tasks
+//        populateDatabase(); //UnComment to populate the db with randomly generated tasks
 
         // Populate WorkList with task from DB
         adapter = new FirebaseListAdapter<TaskInfo>(this, TaskInfo.class, R.layout.row_layout, queryRef){
@@ -256,6 +260,49 @@ public class Tasklist extends AppCompatActivity {
             userID.setValue(0);
 
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the main_menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch(item.getItemId()) {
+            case R.id.menu_tasklist:
+                Toast.makeText(this, "Tasklist", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.menu_my_page:
+                Toast.makeText(this, "My Page", Toast.LENGTH_LONG).show();
+                intent = new Intent(this, PersonalScreenActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_contacts:
+                Toast.makeText(this, "Contacts", Toast.LENGTH_LONG).show();
+                intent = new Intent(this, PhoneDirectory.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_settings:
+                Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
+                intent = new Intent(this, Settings.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_sign_out:
+                Toast.makeText(this, MainActivity.mAuth.toString(), Toast.LENGTH_LONG).show();
+
+                (MainActivity.mAuth).getInstance().signOut();
+                startActivity(new Intent(Tasklist.this, MainActivity.class));
+                finish();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 }
 

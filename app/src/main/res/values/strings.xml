@@ -13,13 +13,13 @@
 
 
     <string-array name="sort_by_array">
-    <item>Patient ID</item>
-    <item>Patient Name</item>
-    <item>Task ID</item>
-    <item>Destination</item>
-    <item>Task Creation Time</item>
-    <item>Completed Time</item>
-    <item>Task Duration</item>
+        <item>Patient ID</item>
+        <item>Patient Name</item>
+        <item>Task ID</item>
+        <item>Destination</item>
+        <item>Task Creation Time</item>
+        <item>Completed Time</item>
+        <item>Task Duration</item>
     </string-array>
 
 
