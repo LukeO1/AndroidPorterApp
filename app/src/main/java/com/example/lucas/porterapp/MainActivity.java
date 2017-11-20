@@ -1,6 +1,13 @@
 package com.example.lucas.porterapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,12 +26,14 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener{
     private EditText mEmail;
     private EditText mPassword;
     private Button mLogin;
     public static FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private SensorManager sensorManager;
+//    private SQLiteDatabase myDB;
 
 
     private TextView barcodeResult;
@@ -65,7 +74,41 @@ public class MainActivity extends AppCompatActivity {
                 callTechnicalSupport(view);
             }
         });
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        myDB = this.openOrCreateDatabase("PorterDB", MODE_PRIVATE, null);
+//        myDB.execSQL("CREATE TABLE IF NOT EXISTS "
+//                + "StepCounter"
+//                + " (Steps INT(8));");
 
+
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        if (countSensor != null) {
+            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
+        } else {
+            Toast.makeText(this, "Count sensor not available!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+//        myDB.execSQL("UPDATE StepCounter SET Steps = Steps + 1;");
+//        Cursor cursor = myDB.rawQuery("SELECT * FROM StepCounter;", null);
+//        System.out.println(cursor.getInt(cursor.getColumnIndex("Steps")));
+        // steps in DB += 1
+//        if (activityRunning) {
+//            count.setText(String.valueOf(event.values[0]));
+//        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
     // ---------------------------------------------------------------------------------------------
