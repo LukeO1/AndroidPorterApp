@@ -23,6 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String TIMESTAMP_CREATED = "TIMESTAMP_CREATED";
     public static final String TIMESTAMP_COMPLETED = "TIMESTAMP_COMPLETED";
     public static final String TIMETAKEN = "TIMETAKEN";
+    public static final String USER_ID = "USER_ID";
 
     //Columns for pedometer table
     public static final String STEPS_TAKEN = "STEPS_TAKEN";
@@ -30,14 +31,16 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     //Call to create a database
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 3);
+        super(context, DATABASE_NAME, null, 4);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         //SQL query to create a table with columns initialized
         db.execSQL("create table " + TABLE_COMPLETED_TASKS + "( ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " TASK_ID TEXT, WARD_NAME TEXT, PATIENT_NAME TEXT, DESTINATION TEXT, TIMESTAMP_CREATED TEXT, TIMESTAMP_COMPLETED TEXT, TIMETAKEN TEXT);" );
+                " TASK_ID TEXT, WARD_NAME TEXT, PATIENT_NAME TEXT, DESTINATION TEXT, " +
+                "TIMESTAMP_CREATED TEXT, TIMESTAMP_COMPLETED TEXT, TIMETAKEN TEXT, USER_ID TEXT);" );
+
         db.execSQL("create table " + TABLE_PEDOMETER + "( STEPS_TAKEN INT(8));");
         startPedoCount();
 
@@ -77,8 +80,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
      * @param timeTaken
      * @return
      */
-    public boolean insertData(String taskId, String wardName, String patientName, String destination,
-                               String timeStampCreated, String timeStampCompleted, String timeTaken){
+    public boolean insertDataCompleted(String taskId, String wardName, String patientName,
+                                       String destination, String timeStampCreated,
+                                       String timeStampCompleted, String timeTaken, String userID){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -90,6 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         contentValues.put(TIMESTAMP_CREATED, timeStampCreated);
         contentValues.put(TIMESTAMP_COMPLETED, timeStampCompleted);
         contentValues.put(TIMETAKEN, timeTaken);
+        contentValues.put(USER_ID, userID);
 
         long result = db.insert(TABLE_COMPLETED_TASKS, null, contentValues);
 

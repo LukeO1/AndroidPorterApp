@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/InProgressHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="In Progress"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/inProgressTextViewMain"
+        android:layout_width="230dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/InProgressHeader" />
+
+
+    <TextView
+        android:id="@+id/inProgressTextViewSub"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:text="more info"
+        app:layout_constraintEnd_toEndOf="@+id/inProgressTextViewMain"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/inProgressTextViewMain"
+        app:layout_constraintTop_toBottomOf="@+id/inProgressTextViewMain" />
+
+
+    <Button
+        android:id="@+id/idScannerLauncher"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:text="Cam"
+        app:layout_constraintEnd_toStartOf="@+id/confirmTaskButton"
+        app:layout_constraintStart_toEndOf="@+id/inProgressTextViewMain"
+        app:layout_constraintTop_toTopOf="@+id/inProgressTextViewMain" />
+
+    <Button
+        android:id="@+id/confirmTaskButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:clickable="false"
+        android:text="OK"
+        app:layout_constraintBottom_toBottomOf="@+id/idScannerLauncher"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/idScannerLauncher"
+        app:layout_constraintTop_toTopOf="@+id/idScannerLauncher" />
+
+
+</android.support.constraint.ConstraintLayout>

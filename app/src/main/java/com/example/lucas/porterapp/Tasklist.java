@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -37,6 +38,8 @@ public class Tasklist extends AppCompatActivity {
     private String itemKey;
     private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck";
     private SharedPreferences.Editor editor;
+    private FirebaseAuth mAuth;
+    private int itemPosition;
 
 
     @Override
@@ -48,7 +51,6 @@ public class Tasklist extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
         boolean checkFileExists = prefs.contains("checkSelected");
-
         if(!checkFileExists){
             editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
             editor.putString("checkSelected", "false");
@@ -60,7 +62,6 @@ public class Tasklist extends AppCompatActivity {
         // Connection to Firebase
         mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
         Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
-//        Query queryRef = mRef.orderByChild("priority"); // Order the list by priority
 
 //        populateDatabase(); //UnComment to populate the db with randomly generated tasks
 
@@ -120,7 +121,7 @@ public class Tasklist extends AppCompatActivity {
      */
     protected void onStop(){
         super.onStop();
-        FirebaseAuth.getInstance().signOut();
+//        FirebaseAuth.getInstance().signOut();
     }
 
 // -------------------------------------------------------------------------------------------------
@@ -135,36 +136,37 @@ public class Tasklist extends AppCompatActivity {
 
         // Get Key of parent node of the item list clicked
         final DatabaseReference itemRef = adapter.getRef(position);
+        itemPosition = position;
         itemKey = itemRef.getKey();
 
         subWorkListButtonsOK.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-            // Retrieve checkSelected flag from shared preference
-            SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
-            String getCheckSelected = prefs.getString("checkSelected", "Not found");
-            boolean checkSelected = Boolean.parseBoolean(getCheckSelected);
+                // Retrieve checkSelected flag from shared preference
+                boolean checkSelected = Boolean.parseBoolean(statusCheck());
 
-            if(!checkSelected){
+                if(!checkSelected){
+//                new RespondOnFinish().execute();
 
-                // Changes DB inProgress value to yes
-                mRef.child(itemKey).child("inProgress").setValue("YES");
+//                FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    mRef.child(itemKey).child("userID").setValue(getUserID());
 
-                // Change checkSelected flag in shared preference to true
-                editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
-                editor.putString("checkSelected", "true");
-                editor.apply();
+                    // Changes DB inProgress value to yes
+                    mRef.child(itemKey).child("inProgress").setValue("YES");
 
-                // Pass WorkList object to personalHomepage Activity
-                Intent i = new Intent(Tasklist.this, PersonalScreenActivity.class).
-                        putExtra("taskObject", taskInfo);
-                startActivity(i);
+                    // Change checkSelected flag in shared preference to true
+                    statusEdit("true");
 
-            }else{
-                //Display error message to User
-                Toast.makeText(Tasklist.this, "Please complete or cancel current task before " +
-                        "accepting a new task", Toast.LENGTH_SHORT).show();
-            }
+//                 Pass WorkList object to personalHomepage Activity
+                    Intent i = new Intent(Tasklist.this, PersonalScreenActivity.class).
+                            putExtra("taskObject", taskInfo);
+                    startActivity(i);
+
+                }else{
+                    //Display error message to User
+                    Toast.makeText(Tasklist.this, "Please complete or cancel current task before " +
+                            "accepting a new task", Toast.LENGTH_LONG).show();
+                }
             toggleItem();
             }
         });
@@ -187,6 +189,18 @@ public class Tasklist extends AppCompatActivity {
         });
     }
 
+// ---------------------------------------------------------------------------------------------
+
+    /**
+     * Retrieves user specific ID from Firebase Authentication
+     * @return User Id of User
+     */
+    public String getUserID() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userID = user.getUid();
+        return userID;
+    }
 
 // -------------------------------------------------------------------------------------------------
 
@@ -204,10 +218,9 @@ public class Tasklist extends AppCompatActivity {
     }
 
 // -------------------------------------------------------------------------------------------------
-
     /**
      * Check the variable stored in a shared preference file if the User has already accepted a Task
-     * @return true if User has alreadt accepted a task, false if not, or not found if file could
+     * @return true if User has already accepted a task, false if not, or not found if file could
      * not be found.
      */
     public String statusCheck(){
@@ -217,7 +230,16 @@ public class Tasklist extends AppCompatActivity {
         //Find value by key, checkSelected
         String checkSelected = prefs.getString("checkSelected", "Not found");
         return checkSelected;
+    }
 
+    /**
+     * Edits a value stored in the shared preference files. The value represents true if use has
+     * already accpeted a task, or false if user has not
+     * @param status the status true or false to change in the file
+     */
+    public void statusEdit(String status){
+        editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
+        editor.putString("checkSelected", status).apply();
     }
 // -------------------------------------------------------------------------------------------------
     /**
@@ -262,6 +284,7 @@ public class Tasklist extends AppCompatActivity {
         }
     }
 
+// -------------------------------------------------------------------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the main_menu; this adds items to the action bar if it is present.
@@ -304,5 +327,6 @@ public class Tasklist extends AppCompatActivity {
 
         return true;
     }
+// -------------------------------------------------------------------------------------------------
 }
 

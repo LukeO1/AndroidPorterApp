@@ -26,7 +26,8 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener{
+//public class MainActivity extends AppCompatActivity implements SensorEventListener{
+public class MainActivity extends AppCompatActivity{
     private EditText mEmail;
     private EditText mPassword;
     private Button mLogin;
@@ -80,28 +81,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        if (countSensor != null) {
-            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
-        } else {
-            Toast.makeText(this, "Count sensor not available!", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        db.countStep();
-//        if (activityRunning) {
-//            count.setText(String.valueOf(event.values[0]));
+//    @Override
+//    public void onResume(){
+//        super.onResume();
+//        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+//        if (countSensor != null) {
+//            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
+//        } else {
+//            Toast.makeText(this, "Count sensor not available!", Toast.LENGTH_LONG).show();
 //        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
+//    }
+//
+//    @Override
+//    public void onSensorChanged(SensorEvent event) {
+//        db.countStep();
+////        if (activityRunning) {
+////            count.setText(String.valueOf(event.values[0]));
+////        }
+//    }
+//
+//    @Override
+//    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//    }
 
     // ---------------------------------------------------------------------------------------------
 

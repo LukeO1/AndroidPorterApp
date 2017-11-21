@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,11 +19,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Activity to display user specific data
@@ -30,51 +39,58 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
     private DatabaseReference mRef;
     private DatabaseHelper myDB;
-    private ListView completedListView;
-    private TaskInfo task;
-    private TextView InProgressTextView;
-    private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck";
+    private FirebaseAuth mAuth;
     private SharedPreferences.Editor editor;
+    private TaskInfo task;
+    private TaskInfo taskInfo;
+    private ListView completedListView;
+    private TextView InProgressTextViewMain;
+    private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck";
     private String orderBy;
     private Spinner sortBySpinner;
+    private Button idScannerButton;
+    private Button confirmTaskButton;
+    private boolean flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_screen);
         getSupportActionBar().setTitle("Personal Work List");
 
-        mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
-
-        //Retrieve intent passed from TaskList activity, a WorkList object
-        Intent i = getIntent();
-        if(i.hasExtra("taskObject")) {
-            task = (TaskInfo) i.getSerializableExtra("taskObject");
-
-
-            //Set Text to inProgress TextView
-            InProgressTextView = (TextView) findViewById((R.id.InProgressTextView));
-            InProgressTextView.setText(task.getWard() + " " + task.getPatientName() + " " + task.getDestination());
-        }
-
         //Create a SQLite database
         myDB = new DatabaseHelper(this);
 
+        // Retrieve checkSelected flag from shared preference
+        boolean checkSelected = Boolean.parseBoolean(statusCheck());
+
+        // Retrieve intent passed from TaskList activity, a WorkList object
+        Intent i = getIntent();
+        if (i.hasExtra("taskObject")) {
+
+            task = (TaskInfo) i.getSerializableExtra("taskObject");
+
+            //Set Text to inProgress TextView
+            View inProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
+            InProgressTextViewMain = (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTextViewMain));
+            InProgressTextViewMain.setText(task.getWard() + " " + task.getTaskID());
+
+            TextView inProgressTextViewSub = (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTextViewSub));
+            inProgressTextViewSub.setText(task.getPatientName() + " " + task.getInProgress());
+
+            flag = false;
+            new RespondOnFinish().execute();
+
+        }else if(checkSelected){
+            flag = true;
+            new RespondOnFinish().execute();
+        }
+
+
         populateList(orderBy);
-
-        Button confirmTaskButton = (Button) findViewById(R.id.confirmTaskButton);
-        confirmTaskButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                confirmTask(task);
-                InProgressTextView.setText("None in Progress");
-                mRef.child("Task 0").removeValue();
-
-                editStatus("false");
-                populateList(orderBy);
-
-            }
-        });
+        idScannerLauncher();
+        confirmTaskButtonListener();
 
         // spinner to sort the completed task list
         sortBySpinner = (Spinner) findViewById(R.id.sortBySpinner);
@@ -88,17 +104,50 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         sortBySpinner.setOnItemSelectedListener(this);
 
     }
+// -------------------------------------------------------------------------------------------------
 
-    // ---------------------------------------------------------------------------------------------
 
+    public void idScannerLauncher() {
 
-    public void editStatus(String status){
+        View InProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
+        idScannerButton = (Button) InProgressTextViewHolder.findViewById(R.id.idScannerLauncher);
+        confirmTaskButton = (Button) InProgressTextViewHolder.findViewById(R.id.confirmTaskButton);
 
-        editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
-        editor.putString("checkSelected", status).apply();
+        idScannerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                idScannerButton.setEnabled(false);
+                confirmTaskButton.setClickable(true);
+                Toast.makeText(getApplicationContext(), "ID Scanner Launcher", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
-    // ---------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+    public void confirmTaskButtonListener() {
+
+        View InProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
+        confirmTaskButton = (Button) InProgressTextViewHolder.findViewById(R.id.confirmTaskButton);
+        confirmTaskButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                boolean checkSelected = Boolean.parseBoolean(statusCheck());
+                if(checkSelected){
+                    InProgressTextViewMain.setText("None in Progress");
+                    confirmTask(taskInfo);
+                    statusEdit("false");
+                    populateList(orderBy);
+                    mRef.child(taskInfo.getTaskID()).removeValue();
+                }else{
+                    Toast.makeText(getApplicationContext(), "No Task to confirm", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+    }
+
+// ---------------------------------------------------------------------------------------------
 
     public void confirmTask(TaskInfo task){
 
@@ -112,11 +161,99 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         String timeStampCreated = task.getTimeStamp();
         String timeStampCompleted = currentTime;
         String timeTaken = task.getMinutes();
-
+        String userID = task.getUserID();
 //        myDB.deleteAll(); //Clear the DB
 
         //insert data into the DB
-        boolean result = myDB.insertData(taskId, wardName, patientName, destination, timeStampCreated, timeStampCompleted,  timeTaken);
+        boolean result = myDB.insertDataCompleted(taskId, wardName, patientName, destination,
+                timeStampCreated, timeStampCompleted,  timeTaken, userID);
+    }
+// ---------------------------------------------------------------------------------------------
+    public TaskInfo readDataListener(){
+
+        mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
+
+        Query query = mRef.orderByChild("userID").equalTo(getUserID());
+        readData(query, new OnGetDataListener() {
+            @Override
+            public void onSucess(DataSnapshot dataSnapshot) {
+
+                View InProgressTextViewHolder = (View)findViewById(R.id.InProgressTextViewHolder);
+                InProgressTextViewMain = (TextView) InProgressTextViewHolder.findViewById((R.id.inProgressTextViewMain));
+
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    taskInfo = child.getValue(TaskInfo.class);
+                    if(flag){
+                        InProgressTextViewMain.setText(taskInfo.getWard() + " " +
+                                taskInfo.getPatientName() + " " + taskInfo.getDestination());
+                    }
+                }
+            }
+
+            @Override
+            public void onStart() {}
+
+            @Override
+            public void onFailure() {}
+        });
+
+        return taskInfo;
+    }
+    // ---------------------------------------------------------------------------------------------
+    public void readData(Query ref, final OnGetDataListener listener) {
+        listener.onStart();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.onSucess(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onFailure();
+            }
+        });
+
+    }
+
+
+// ---------------------------------------------------------------------------------------------
+    /**
+     * Retrieves user specific ID from Firebase Authentication
+     * @return User Id of User
+     */
+    public String getUserID() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userID = user.getUid();
+        return userID;
+    }
+
+// -------------------------------------------------------------------------------------------------
+
+    /**
+     * Check the variable stored in a shared preference file if the User has already accepted a Task
+     * @return true if User has alreadt accepted a task, false if not, or not found if file could
+     * not be found.
+     */
+    public String statusCheck(){
+        //Find shared preference file
+        SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
+
+        //Find value by key, checkSelected
+        String checkSelected = prefs.getString("checkSelected", "Not found");
+        return checkSelected;
+
+    }
+
+    /**
+     * Edits a value stored in the shared preference files. The value represents true if use has
+     * already accpeted a task, or false if user has not
+     * @param status the status true or false to change in the file
+     */
+    public void statusEdit(String status){
+        editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
+        editor.putString("checkSelected", status).apply();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -125,22 +262,16 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
         Context context = getApplicationContext();
         Toast.makeText(context, orderBy, Toast.LENGTH_LONG);
-
         CursorAdapter adapter;
 
         // Populate the completed task list view using a custom adapter found at Cursor Adapter file
         completedListView = (ListView) findViewById(R.id.CompletedListView);
 
         Cursor cursor = myDB.createCursor(orderBy);
-        if(cursor != null)
-        {
+        if(cursor != null) {
             adapter = new CursorAdapter(this, R.layout.row_layout_completed, cursor, 0 );
             completedListView.setAdapter(adapter);
-        } else {
-
-        }
-
-
+        } else {}
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -192,7 +323,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
     }
 
-    // ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
 
     // required because of spinner
     @Override
@@ -200,7 +331,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
     }
 
-    // ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -243,5 +374,33 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         }
 
         return true;
+    }
+
+// -------------------------------------------------------------------------------------------------
+    class RespondOnFinish extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            setProgressBarIndeterminateVisibility(true);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            while(readDataListener() == null){
+                readDataListener();
+                try {
+                    TimeUnit.MILLISECONDS.sleep(750);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        public void onPostExecute(Void result) {
+            setProgressBarIndeterminateVisibility(false);
+        }
     }
 }
