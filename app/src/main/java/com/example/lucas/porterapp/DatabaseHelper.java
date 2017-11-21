@@ -24,6 +24,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String TIMESTAMP_COMPLETED = "TIMESTAMP_COMPLETED";
     public static final String TIMETAKEN = "TIMETAKEN";
 
+    //Columns for pedometer table
+    public static final String STEPS_TAKEN = "STEPS_TAKEN";
+
+
     //Call to create a database
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 3);
@@ -34,11 +38,29 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         //SQL query to create a table with columns initialized
         db.execSQL("create table " + TABLE_COMPLETED_TASKS + "( ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " TASK_ID TEXT, WARD_NAME TEXT, PATIENT_NAME TEXT, DESTINATION TEXT, TIMESTAMP_CREATED TEXT, TIMESTAMP_COMPLETED TEXT, TIMETAKEN TEXT);" );
+        db.execSQL("create table " + TABLE_PEDOMETER + "( STEPS_TAKEN INT(8));");
+        startPedoCount();
+
+
+    }
+
+    public void startPedoCount(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(STEPS_TAKEN, 0);
+        db.insert(TABLE_PEDOMETER, null, contentValues);
+    }
+
+    public void countStep(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.rawQuery("UPDATE " + TABLE_PEDOMETER + " SET STEPS_TAKEN = STEPS_TAKEN + 1;", null);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPLETED_TASKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PEDOMETER);
         onCreate(db);
     }
 
