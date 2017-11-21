@@ -28,7 +28,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     //Columns for pedometer table
     public static final String STEPS_TAKEN = "STEPS_TAKEN";
 
-
     //Call to create a database
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 4);
@@ -36,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         //SQL query to create a table with columns initialized
         db.execSQL("create table " + TABLE_COMPLETED_TASKS + "( ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " TASK_ID TEXT, WARD_NAME TEXT, PATIENT_NAME TEXT, DESTINATION TEXT, " +
@@ -43,7 +43,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         db.execSQL("create table " + TABLE_PEDOMETER + "( STEPS_TAKEN INT(8));");
         startPedoCount();
-
 
     }
 
@@ -69,17 +68,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
 // -------------------------------------------------------------------------------------------------
 
-    /**
-     * InsertData into database
-     * @param taskId
-     * @param wardName
-     * @param patientName
-     * @param destination
-     * @param timeStampCreated
-     * @param timeStampCompleted
-     * @param timeTaken
-     * @return
-     */
     public boolean insertDataCompleted(String taskId, String wardName, String patientName,
                                        String destination, String timeStampCreated,
                                        String timeStampCompleted, String timeTaken, String userID){
@@ -103,9 +91,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     }
 // -------------------------------------------------------------------------------------------------
-
     /**
-     * Query al data from the database and store in a cursor
+     * Query all data from the database and store in a cursor
      * @return
      */
     public Cursor createCursor(String orderBy) {
@@ -113,9 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_COMPLETED_TASKS + " ORDER BY " + orderBy + " DESC" , null); //Select all from db
 
-        if(cursor!=null && cursor.getCount()>0){
-            return cursor;
-        }
+        if(cursor!=null && cursor.getCount()>0){ return cursor; }
         return null;
     }
 

@@ -49,12 +49,13 @@ public class Tasklist extends AppCompatActivity {
         setContentView(R.layout.activity_tasklist);
         getSupportActionBar().setTitle("Work List");
 
-        SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
-        boolean checkFileExists = prefs.contains("checkSelected");
+        statusEdit("false"); //TEMP VALUE - must set value back to false and force user to release
+                            // work items before sign out
+
+        boolean checkFileExists = Boolean.parseBoolean(statusCheck());
         if(!checkFileExists){
             editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
-            editor.putString("checkSelected", "false");
-            editor.apply();
+            editor.putString("checkSelected", "false").apply();
         }
 
         listView = (ListView)findViewById(R.id.listview_worklist);
@@ -63,7 +64,7 @@ public class Tasklist extends AppCompatActivity {
         mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
         Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
 
-//        populateDatabase(); //UnComment to populate the db with randomly generated tasks
+        populateDatabase(); //UnComment to populate the db with randomly generated tasks
 
         // Populate WorkList with task from DB
         adapter = new FirebaseListAdapter<TaskInfo>(this, TaskInfo.class, R.layout.row_layout, queryRef){
@@ -77,7 +78,6 @@ public class Tasklist extends AppCompatActivity {
                 mainWorkListItemWard.setText(model.getWard());
                 mainWorkListItemTimer.setText(model.getMinutes() + "mins");
                 subWorkListTextView.setText(model.getDestination() + "  Priority: " + model.getPriority());
-
             }
         };
         listView.setAdapter(adapter);
@@ -136,44 +136,39 @@ public class Tasklist extends AppCompatActivity {
 
         // Get Key of parent node of the item list clicked
         final DatabaseReference itemRef = adapter.getRef(position);
-        itemPosition = position;
         itemKey = itemRef.getKey();
+        itemPosition = position;
 
         subWorkListButtonsOK.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                // Retrieve checkSelected flag from shared preference
-                boolean checkSelected = Boolean.parseBoolean(statusCheck());
+            // Retrieve checkSelected flag from shared preference
+            boolean checkSelected = Boolean.parseBoolean(statusCheck());
 
-                if(!checkSelected){
-//                new RespondOnFinish().execute();
+            if(!checkSelected){
+                // Set userID field with userID and change inProgress value to yes
+                mRef.child(itemKey).child("userID").setValue(getUserID());
+                mRef.child(itemKey).child("inProgress").setValue("YES");
 
-//                FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    mRef.child(itemKey).child("userID").setValue(getUserID());
+                // Change checkSelected flag in shared preference to true
+                statusEdit("true");
 
-                    // Changes DB inProgress value to yes
-                    mRef.child(itemKey).child("inProgress").setValue("YES");
+                // Pass WorkList object to personalHomepage Activity and start Activity
+                Intent i = new Intent(Tasklist.this, PersonalScreenActivity.class).
+                        putExtra("taskObject", taskInfo);
+                startActivity(i);
 
-                    // Change checkSelected flag in shared preference to true
-                    statusEdit("true");
-
-//                 Pass WorkList object to personalHomepage Activity
-                    Intent i = new Intent(Tasklist.this, PersonalScreenActivity.class).
-                            putExtra("taskObject", taskInfo);
-                    startActivity(i);
-
-                }else{
-                    //Display error message to User
-                    Toast.makeText(Tasklist.this, "Please complete or cancel current task before " +
-                            "accepting a new task", Toast.LENGTH_LONG).show();
-                }
+            }else{
+                //Display error message to User
+                Toast.makeText(Tasklist.this, "Please complete or cancel current task before " +
+                        "accepting a new task", Toast.LENGTH_LONG).show();
+            }
             toggleItem();
             }
         });
     }
 
 // -------------------------------------------------------------------------------------------------
-
     /**
      * Click event listener for Decline Button
      * @param subWorkListButtonsNO
@@ -182,15 +177,12 @@ public class Tasklist extends AppCompatActivity {
     public void buttonOnClickNO(Button subWorkListButtonsNO, final int position){
         subWorkListButtonsNO.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-        //      Toast.makeText(Tasklist.this, "ButtonNO: position: "+ position, Toast.LENGTH_SHORT).show();
-                toggleItem(); //close the expanded item
-
+            toggleItem(); //close the expanded item
             }
         });
     }
 
 // ---------------------------------------------------------------------------------------------
-
     /**
      * Retrieves user specific ID from Firebase Authentication
      * @return User Id of User
@@ -201,9 +193,7 @@ public class Tasklist extends AppCompatActivity {
         String userID = user.getUid();
         return userID;
     }
-
 // -------------------------------------------------------------------------------------------------
-
     /**
      * Toggle list Item close and expand feature. If item is closed expand the view else v.v
      */
@@ -216,7 +206,6 @@ public class Tasklist extends AppCompatActivity {
             }else{ subWorkListItem.setVisibility(View.VISIBLE);}
         } });
     }
-
 // -------------------------------------------------------------------------------------------------
     /**
      * Check the variable stored in a shared preference file if the User has already accepted a Task
@@ -226,7 +215,6 @@ public class Tasklist extends AppCompatActivity {
     public String statusCheck(){
         //Find shared preference file
         SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
-
         //Find value by key, checkSelected
         String checkSelected = prefs.getString("checkSelected", "Not found");
         return checkSelected;
@@ -279,8 +267,7 @@ public class Tasklist extends AppCompatActivity {
             inProgressSince.setValue(0);
 
             DatabaseReference userID = Task.child("userID"); //In progress Since Time
-            userID.setValue(0);
-
+            userID.setValue("0");
         }
     }
 

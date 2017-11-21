@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         db = new DatabaseHelper(this);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-
-
     }
 
     @Override

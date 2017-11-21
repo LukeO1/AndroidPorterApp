@@ -7,10 +7,11 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -41,23 +42,27 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     private DatabaseHelper myDB;
     private FirebaseAuth mAuth;
     private SharedPreferences.Editor editor;
-    private TaskInfo task;
-    private TaskInfo taskInfo;
+    private TaskInfo task, taskInfo;
     private ListView completedListView;
-    private TextView InProgressTextViewMain;
-    private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck";
-    private String orderBy;
+    private TextView inProgressTextViewMain, inProgressTextViewSub;
+    private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck", orderBy;
     private Spinner sortBySpinner;
-    private Button idScannerButton;
-    private Button confirmTaskButton;
+    private Button idScannerButton, confirmTaskButton;
     private boolean flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_screen);
         getSupportActionBar().setTitle("Personal Work List");
+
+        // Initialize views used in code
+        View inProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
+        inProgressTextViewMain = (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTextViewMain));
+        inProgressTextViewSub = (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTextViewSub));
+        completedListView = (ListView) findViewById(R.id.CompletedListView);
+        idScannerButton = (Button) inProgressTextViewHolder.findViewById(R.id.idScannerLauncher);
+        confirmTaskButton = (Button) inProgressTextViewHolder.findViewById(R.id.confirmTaskButton);
 
         //Create a SQLite database
         myDB = new DatabaseHelper(this);
@@ -72,11 +77,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
             task = (TaskInfo) i.getSerializableExtra("taskObject");
 
             //Set Text to inProgress TextView
-            View inProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
-            InProgressTextViewMain = (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTextViewMain));
-            InProgressTextViewMain.setText(task.getWard() + " " + task.getTaskID());
-
-            TextView inProgressTextViewSub = (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTextViewSub));
+            inProgressTextViewMain.setText(task.getWard() + " " + task.getTaskID());
             inProgressTextViewSub.setText(task.getPatientName() + " " + task.getInProgress());
 
             flag = false;
@@ -86,7 +87,6 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
             flag = true;
             new RespondOnFinish().execute();
         }
-
 
         populateList(orderBy);
         idScannerLauncher();
@@ -106,12 +106,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     }
 // -------------------------------------------------------------------------------------------------
 
-
     public void idScannerLauncher() {
-
-        View InProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
-        idScannerButton = (Button) InProgressTextViewHolder.findViewById(R.id.idScannerLauncher);
-        confirmTaskButton = (Button) InProgressTextViewHolder.findViewById(R.id.confirmTaskButton);
 
         idScannerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -120,35 +115,35 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
                 Toast.makeText(getApplicationContext(), "ID Scanner Launcher", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
-// -------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     public void confirmTaskButtonListener() {
 
-        View InProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
-        confirmTaskButton = (Button) InProgressTextViewHolder.findViewById(R.id.confirmTaskButton);
         confirmTaskButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 boolean checkSelected = Boolean.parseBoolean(statusCheck());
                 if(checkSelected){
-                    InProgressTextViewMain.setText("None in Progress");
-                    confirmTask(taskInfo);
-                    statusEdit("false");
-                    populateList(orderBy);
-                    mRef.child(taskInfo.getTaskID()).removeValue();
+                    inProgressTextViewMain.setText("None in Progress");
+                    inProgressTextViewSub.setText("");
+                    confirmTask(taskInfo); //enter item into SQLite local database
+                    statusEdit("false"); // set checkSelected to false so user can accept tasks again
+                    populateList(orderBy); // refresh and populate completed listView
+                    mRef.child(taskInfo.getTaskID()).removeValue(); //remove item from database
                 }else{
-                    Toast.makeText(getApplicationContext(), "No Task to confirm", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                        "No Task to confirm", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
     }
 
-// ---------------------------------------------------------------------------------------------
-
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Parses the item confirmed completed into the SQLite db
+     * @param task
+     */
     public void confirmTask(TaskInfo task){
 
         String currentTime = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
@@ -168,23 +163,24 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         boolean result = myDB.insertDataCompleted(taskId, wardName, patientName, destination,
                 timeStampCreated, timeStampCompleted,  timeTaken, userID);
     }
-// ---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Implementation of the ongetDataListener interface to handle asynchronous tasks
+     * @return
+     */
     public TaskInfo readDataListener(){
 
         mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
-
         Query query = mRef.orderByChild("userID").equalTo(getUserID());
+
         readData(query, new OnGetDataListener() {
             @Override
             public void onSucess(DataSnapshot dataSnapshot) {
 
-                View InProgressTextViewHolder = (View)findViewById(R.id.InProgressTextViewHolder);
-                InProgressTextViewMain = (TextView) InProgressTextViewHolder.findViewById((R.id.inProgressTextViewMain));
-
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     taskInfo = child.getValue(TaskInfo.class);
                     if(flag){
-                        InProgressTextViewMain.setText(taskInfo.getWard() + " " +
+                        inProgressTextViewMain.setText(taskInfo.getWard() + " " +
                                 taskInfo.getPatientName() + " " + taskInfo.getDestination());
                     }
                 }
@@ -196,40 +192,33 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
             @Override
             public void onFailure() {}
         });
-
         return taskInfo;
     }
     // ---------------------------------------------------------------------------------------------
+    /**
+     * Listeners for onGetDataListener interface methods. Returns when the task is finished or failed
+     * @param ref firebase query
+     * @param listener listener
+     */
     public void readData(Query ref, final OnGetDataListener listener) {
         listener.onStart();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                listener.onSucess(dataSnapshot);
-            }
+            public void onDataChange(DataSnapshot dataSnapshot) {listener.onSucess(dataSnapshot);}
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                listener.onFailure();
-            }
+            public void onCancelled(DatabaseError databaseError) {listener.onFailure();}
         });
-
     }
-
-
-// ---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     /**
      * Retrieves user specific ID from Firebase Authentication
      * @return User Id of User
      */
     public String getUserID() {
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        String userID = user.getUid();
-        return userID;
+        return FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
     }
-
-// -------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * Check the variable stored in a shared preference file if the User has already accepted a Task
@@ -240,10 +229,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         //Find shared preference file
         SharedPreferences prefs = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE);
 
-        //Find value by key, checkSelected
-        String checkSelected = prefs.getString("checkSelected", "Not found");
-        return checkSelected;
-
+        return prefs.getString("checkSelected", "Not found");
     }
 
     /**
@@ -263,9 +249,6 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         Context context = getApplicationContext();
         Toast.makeText(context, orderBy, Toast.LENGTH_LONG);
         CursorAdapter adapter;
-
-        // Populate the completed task list view using a custom adapter found at Cursor Adapter file
-        completedListView = (ListView) findViewById(R.id.CompletedListView);
 
         Cursor cursor = myDB.createCursor(orderBy);
         if(cursor != null) {
@@ -320,18 +303,15 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
                 populateList(orderBy);
             }
         }
-
     }
 
-// ---------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
     // required because of spinner
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> adapterView) {}
 
-    }
-
-// ---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -380,10 +360,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     class RespondOnFinish extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            setProgressBarIndeterminateVisibility(true);
-        }
+        protected void onPreExecute(){super.onPreExecute();}
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -399,8 +376,6 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
             return null;
         }
 
-        public void onPostExecute(Void result) {
-            setProgressBarIndeterminateVisibility(false);
-        }
+        public void onPostExecute(Void result) {}
     }
 }
