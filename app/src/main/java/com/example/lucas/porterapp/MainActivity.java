@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private SensorManager sensorManager;
-    private DatabaseHelper db;
+    private DatabaseHelper myDB;
 
     private TextView barcodeResult;
 
@@ -74,9 +74,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 callTechnicalSupport(view);
             }
         });
-        db = new DatabaseHelper(this);
+        myDB = new DatabaseHelper(this);
+//        SQLiteDatabase newdb = db.getWritableDatabase();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
+//        db.onCreate(newdb);
     }
 
     @Override
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        db.countStep();
+        System.out.println("!!!!!STEP!!!!!");
+        myDB.countStep();
 //        if (activityRunning) {
 //            count.setText(String.valueOf(event.values[0]));
 //        }

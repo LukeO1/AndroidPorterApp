@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     //Call to create a database
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 4);
+        super(context, DATABASE_NAME, null, 5);
     }
 
     @Override
@@ -41,8 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 " TASK_ID TEXT, WARD_NAME TEXT, PATIENT_NAME TEXT, DESTINATION TEXT, " +
                 "TIMESTAMP_CREATED TEXT, TIMESTAMP_COMPLETED TEXT, TIMETAKEN TEXT, USER_ID TEXT);" );
 
-        db.execSQL("create table " + TABLE_PEDOMETER + "( STEPS_TAKEN INT(8));");
-        startPedoCount();
+        db.execSQL("create table " + TABLE_PEDOMETER + "( ID INTEGER PRIMARY KEY AUTOINCREMENT, STEPS_TAKEN INTEGER);");
+//        System.out.println("DB ONCREATE!");
 
     }
 
@@ -51,11 +51,25 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         ContentValues contentValues = new ContentValues();
         contentValues.put(STEPS_TAKEN, 0);
         db.insert(TABLE_PEDOMETER, null, contentValues);
+//        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_COMPLETED_TASKS + " ORDER BY " + orderBy + " DESC" , null); //Select all from db
+//        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
+//        String[] aaa = cursor.getColumnNames();
+//        for(String a : aaa){
+//            System.out.println("Column: " + a);
+//        }
+//        System.out.println(cursor.getColumnIndex("STEPS_TAKEN"));
+//        cursor.moveToFirst();
+//        System.out.println(cursor.getInt(2));
+
     }
 
     public void countStep(){
+//        System.out.println("COUNTED!!!!!");
         SQLiteDatabase db = this.getReadableDatabase();
-        db.rawQuery("UPDATE " + TABLE_PEDOMETER + " SET STEPS_TAKEN = STEPS_TAKEN + 1;", null);
+        db.execSQL("UPDATE " + TABLE_PEDOMETER + " SET STEPS_TAKEN = STEPS_TAKEN + 1;");
+//        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
+//        cursor.moveToFirst();
+//        System.out.println("NEW COUNT: " + cursor.getInt(2));
 
     }
 
@@ -64,6 +78,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPLETED_TASKS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PEDOMETER);
         onCreate(db);
+        startPedoCount();
+
     }
 
 // -------------------------------------------------------------------------------------------------
