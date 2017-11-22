@@ -268,6 +268,9 @@ public class Tasklist extends AppCompatActivity {
 
             DatabaseReference userID = Task.child("userID"); //In progress Since Time
             userID.setValue("0");
+
+            DatabaseReference patientID = Task.child("patientID"); //In progress Since Time
+            patientID.setValue(i);
         }
     }
 
