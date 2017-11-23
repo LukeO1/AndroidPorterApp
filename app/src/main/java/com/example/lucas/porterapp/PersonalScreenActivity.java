@@ -10,11 +10,9 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +42,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class PersonalScreenActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private static final int REQUEST_BARCODE_RESULT = 1;
+
     private DatabaseReference mRef;
     private DatabaseHelper myDB;
     private FirebaseAuth mAuth;
@@ -55,6 +57,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     private Spinner sortBySpinner;
     private Button inProgressCameraButton, inProgressConfirmTaskButton;
     private boolean flag;
+    private String currentPatientID = null;
     ViewFlipper inProgressViewFlipper;
 
     @Override
@@ -134,6 +137,8 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         inProgressConfirmTaskButton =
                 (Button) inProgressTextViewHolder.findViewById(R.id.inProgressConfirmTaskButton);
 
+        inProgressConfirmTaskButton.setEnabled(false); // prevents user from clicking until patient has been scanned
+
         inProgressViewFlipper = (ViewFlipper)findViewById(R.id.inProgressViewFlipper);
     }
 
@@ -153,6 +158,8 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         inProgressTimerView.setText(xTask.getMinutes()+" Mins");
         inProgressPatientNameView.setText("Name: " + xTask.getPatientName());
         inProgressPatientIDView.setText("Patient ID: " + xTask.getPatientID());
+        currentPatientID = xTask.getPatientID();
+
         // Set Icon for transport moder
         if(xTask.getTransportMode() == 1){
             inProgressTransportModeIconView.setText(iconWheelchair);
@@ -184,9 +191,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
         inProgressCameraButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                inProgressCameraButton.setEnabled(false);
-                inProgressConfirmTaskButton.setClickable(true);
-                Toast.makeText(getApplicationContext(), "ID Scanner Launcher", Toast.LENGTH_SHORT).show();
+                scanBarcode(v);
             }
         });
     }
@@ -453,5 +458,40 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         }
 
         public void onPostExecute(Void result) {}
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    // called to initiate the barcode scanning
+    public void scanBarcode(View v) {
+        Intent intent = new Intent(this, BarcodeScanner.class);
+
+        // receives the result from the BarcodeScanner activity
+        startActivityForResult(intent, REQUEST_BARCODE_RESULT);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    // get the result of the barcode back rom the BarcodeScanner
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_BARCODE_RESULT && resultCode == CommonStatusCodes.SUCCESS){
+                if(data!=null){
+                    Barcode barcode = data.getParcelableExtra("barcode");
+                    if(currentPatientID.equals(barcode.displayValue)){
+                        inProgressCameraButton.setEnabled(false);
+                        inProgressConfirmTaskButton.setEnabled(true);
+                        Toast.makeText(this, "Barcode successfully detected!", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(this, "Incorrect barcode detected!", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(this, "No barcode detected from camera", Toast.LENGTH_LONG).show();
+                }
+
+        }
+
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
