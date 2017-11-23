@@ -21,13 +21,14 @@ public class TaskInfo implements Serializable {
     private long inProgressSince;
     private String userID;
     private String patientID;
+    private String searchValue;
 
     public TaskInfo() {
     }
 
     public TaskInfo(String taskID, String destination, String patientName, String ward,
                     int priority, String timeStamp, String inProgress, long inProgressSince,
-                    String userID, String patientID) {
+                    String userID, String patientID, String searchValue) {
         this.taskID = taskID;
         this.destination = destination;
         this.patientName = patientName;
@@ -38,6 +39,7 @@ public class TaskInfo implements Serializable {
         this.inProgressSince = inProgressSince;
         this.userID = userID;
         this.patientID = patientID;
+        this.searchValue = searchValue;
     }
 
     public String getTaskID(){
@@ -137,4 +139,11 @@ public class TaskInfo implements Serializable {
         this.patientID = patientID;
     }
 
+    public String getSearchValue(){
+        return searchValue;
+    }
+
+    public void setSearchValue(){
+        this.searchValue = searchValue;
+    }
 }

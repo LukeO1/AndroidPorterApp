@@ -8,6 +8,7 @@
     <string name="dialog_select_prompt">Choose a picture</string>
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_gallery">Gallery</string>
+    <string name="icon_wheelchair">&#xf193;</string>
 
     <string name="image_picker_error">Something is wrong with that image. Pick a different one please.</string>
 
@@ -22,5 +23,16 @@
         <item>Task Duration</item>
     </string-array>
 
+    <string-array name="firebase_filter_array">
+        <item>View All</item>
+        <item>St. John Ward</item>
+        <item>Helens Ward</item>
+        <item>Herbert Ward</item>
+        <item>St. Kevins Ward</item>
+        <item>Rialto Ward</item>
+        <item>Mary Mercers Ward</item>
+        <item>John Houstons Ward</item>
+        <item>Adams Ward</item>
+    </string-array>
 
 </resources>

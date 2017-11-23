@@ -1,86 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="20dp"
-    android:animateLayoutChanges="true"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/WorkListItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.lucas.porterapp.Tasklist"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
     android:orientation="vertical"
-    android:id="@+id/WorkListItem">
+    tools:context="com.example.lucas.porterapp.Tasklist">
 
-    <LinearLayout
+
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/mainWorkListItem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="122dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/mainWorkListItemWard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:id="@+id/workListOriginView"
+            android:layout_width="268dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="TextView"
-            android:textSize="24sp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/mainWorkListItemTimer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:id="@+id/workListDestinationView"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="TextView"
-            android:textSize="18sp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/workListOriginView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/workListOriginView" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/workListTransportModeView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/workListOriginView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toEndOf="@+id/workListOriginView"
+            app:layout_constraintTop_toTopOf="@+id/workListOriginView"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <LinearLayout
+        <TextView
+            android:id="@+id/workListTimerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/workListDestinationView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/workListDestinationView"
+            app:layout_constraintTop_toTopOf="@+id/workListDestinationView" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
         android:visibility="gone"
         android:id="@+id/subWorkListItem"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_width="0dp"
+        android:layout_height="107dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainWorkListItem">
 
         <TextView
-            android:id="@+id/subWorkListTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:id="@+id/workListPatientNameView"
+            android:layout_width="165dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="TextView"
-            android:textSize="18sp"
-            tools:text="Destination" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/workListPatientIDView"
+            android:layout_width="158dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/workListPatientNameView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/workListPatientNameView"
+            app:layout_constraintTop_toTopOf="@+id/workListPatientNameView" />
 
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/subWorkListButtonsOK"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Accept"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/workListPatientNameView"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/workListPatientNameView" />
 
-            <Button
-                android:id="@+id/subWorkListButtonsOK"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:text="Accept"
-                android:textSize="12sp"
+        <Button
+            android:id="@+id/subWorkListButtonsNO"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Decline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintStart_toStartOf="@+id/workListPatientIDView"
+            app:layout_constraintTop_toBottomOf="@+id/workListPatientIDView" />
 
-                />
+    </android.support.constraint.ConstraintLayout>
 
-            <Button
-                android:id="@+id/subWorkListButtonsNO"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:text="Decline"
-                android:textSize="12sp"
-                />
-            />
-        </LinearLayout>
+</android.support.constraint.ConstraintLayout>
+    <!--<LinearLayout-->
+    <!--android:id="@+id/mainWorkListItem"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal">-->
 
-    </LinearLayout>
+    <!--<TextView-->
+    <!--android:id="@+id/mainWorkListItemWard"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="TextView"-->
+    <!--android:textSize="24sp" />-->
 
-</LinearLayout>
+    <!--<TextView-->
+    <!--android:id="@+id/mainWorkListItemTimer"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="TextView"-->
+    <!--android:textSize="18sp" />-->
+
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:visibility="gone"-->
+    <!--android:id="@+id/subWorkListItem"-->
+
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/subWorkListTextView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="TextView"-->
+    <!--android:textSize="18sp"-->
+    <!--tools:text="Destination" />-->
+
+    <!--<LinearLayout-->
+
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<Button-->
+    <!--android:id="@+id/subWorkListButtonsOK"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:focusable="false"-->
+    <!--android:text="Accept"-->
+    <!--android:textSize="12sp"-->
+
+    <!--/>-->
+
+    <!--<Button-->
+    <!--android:id="@+id/subWorkListButtonsNO"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:focusable="false"-->
+    <!--android:text="Decline"-->
+    <!--android:textSize="12sp"-->
+    <!--/>-->
+    <!--/>-->
+    <!--</LinearLayout>-->
