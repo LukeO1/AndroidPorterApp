@@ -2,11 +2,15 @@ package com.example.lucas.porterapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -48,7 +53,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
     private SharedPreferences.Editor editor;
     private FirebaseAuth mAuth;
     private int itemPosition;
-    Spinner firebaseFilterSpinner;
+    private Spinner firebaseFilterSpinner;
 
 
     @Override
@@ -57,6 +62,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasklist);
         getSupportActionBar().setTitle("Work List");
+
         statusEdit("false"); //TEMP VALUE - must set value back to false and force user to release
         // work items before sign out
 
@@ -94,17 +100,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
             @Override
             protected void populateView(View v, TaskInfo model, int position) {
 
-                TextView workListOriginView = (TextView) v.findViewById(R.id.workListOriginView);
-                TextView workListDestinationView = (TextView) v.findViewById(R.id.workListDestinationView);
-                TextView workListTimerView = (TextView) v.findViewById(R.id.workListTimerView);
-                TextView workListPatientNameView = (TextView) v.findViewById(R.id.workListPatientNameView);
-                TextView workListPatientIDView = (TextView) v.findViewById(R.id.workListPatientIDView);
-
-                workListOriginView.setText(model.getWard());
-                workListDestinationView.setText(model.getDestination());
-                workListTimerView.setText(model.getMinutes());
-                workListPatientIDView.setText(model.getPatientName());
-                workListPatientNameView.setText(model.getPatientName());
+                populateItemView(model, v);
 
             }
         };
@@ -116,28 +112,27 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
             public void onItemClick(final AdapterView<?> parent, View view,
                                     final int position, long id) {
 
-                //Toast.makeText(Tasklist.this, "Item clicked, position: "+ position, Toast.LENGTH_SHORT).show();
-                subWorkListItem = (ConstraintLayout) view.findViewById(R.id.subWorkListItem);
-                toggleItem();
+            //Toast.makeText(Tasklist.this, "Item clicked, position: "+ position, Toast.LENGTH_SHORT).show();
+            subWorkListItem = (ConstraintLayout) view.findViewById(R.id.subWorkListItem);
+            toggleItem();
 
-                Button subWorkListButtonsOK = (Button) view.findViewById(R.id.subWorkListButtonsOK);
-                Button subWorkListButtonsNO = (Button) view.findViewById(R.id.subWorkListButtonsNO);
+            Button subWorkListButtonsOK = (Button) view.findViewById(R.id.subWorkListButtonsOK);
+            Button subWorkListButtonsNO = (Button) view.findViewById(R.id.subWorkListButtonsNO);
 
-                TaskInfo x = (TaskInfo) listView.getItemAtPosition(position);
+            TaskInfo x = (TaskInfo) listView.getItemAtPosition(position);
 
-                buttonOnClickOK(subWorkListButtonsOK, position, x);
-                buttonOnClickNO(subWorkListButtonsNO, position);
+            buttonOnClickOK(subWorkListButtonsOK, position, x);
+            buttonOnClickNO(subWorkListButtonsNO, position);
 
             }
         });
-
 
         FloatingActionButton openPersonalActivity = (FloatingActionButton) findViewById(R.id.openPersonalWorklist);
         openPersonalActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Tasklist.this, PersonalScreenActivity.class);
-                startActivity(intent);
+            Intent intent = new Intent(Tasklist.this, PersonalScreenActivity.class);
+            startActivity(intent);
             }
         });
 
@@ -160,17 +155,50 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
 
 // -------------------------------------------------------------------------------------------------
     public void populateItemView(TaskInfo model, View v){
+        Typeface font = Typeface.createFromAsset( getAssets(), "fontawesome-webfont.ttf" );
+
         TextView workListOriginView = (TextView) v.findViewById(R.id.workListOriginView);
         TextView workListDestinationView = (TextView) v.findViewById(R.id.workListDestinationView);
         TextView workListTimerView = (TextView) v.findViewById(R.id.workListTimerView);
         TextView workListPatientNameView = (TextView) v.findViewById(R.id.workListPatientNameView);
         TextView workListPatientIDView = (TextView) v.findViewById(R.id.workListPatientIDView);
+        TextView workListTransportModeView = (TextView) v.findViewById(R.id.workListTransportModeView);
 
-        workListOriginView.setText(model.getWard());
-        workListDestinationView.setText(model.getDestination());
-        workListTimerView.setText(model.getMinutes());
-        workListPatientIDView.setText(model.getPatientName());
+        String iconWheelchair = getString(R.string.icon_wheelchair);
+        String iconBed = getString(R.string.icon_bed);
+        String iconWalking = getString(R.string.icon_walking);
+        String iconArrow = getString(R.string.icon_right_arrow);
+        String iconEllipsis = getString(R.string.icon_ellipsis);
+
+        ImageView timerIcon = (ImageView) v.findViewById(R.id.iconTimerView);
+
+        workListOriginView.setText("From " + model.getWard() + " " + iconArrow);
+        workListDestinationView.setText(iconEllipsis + " " + iconArrow+ " To " + model.getDestination());
+        workListTimerView.setText(model.getMinutes()+" Mins");
+        workListPatientIDView.setText(model.getPatientID());
         workListPatientNameView.setText(model.getPatientName());
+
+        // Set Icon for transport moder
+        if(model.getTransportMode() == 1){
+            workListTransportModeView.setText(iconWheelchair);
+        }else if(model.getTransportMode() == 2){
+            workListTransportModeView.setText(iconBed);
+        }else if(model.getTransportMode() == 3){
+            workListTransportModeView.setText(iconWalking);
+        }
+
+        // Set icon colour for priority
+        if(model.getPriority() == 1){
+            DrawableCompat.setTint(timerIcon.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.colourTimer1));
+        }else if(model.getPriority() == 2){
+            DrawableCompat.setTint(timerIcon.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.colourTimer2));
+        }else{
+            DrawableCompat.setTint(timerIcon.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.colourTimer3));
+        }
+
+        workListOriginView.setTypeface(font);
+        workListTransportModeView.setTypeface(font);
+        workListDestinationView.setTypeface(font);
     }
 // -------------------------------------------------------------------------------------------------
 
@@ -266,11 +294,11 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (subWorkListItem.getVisibility() == View.VISIBLE) {
-                    subWorkListItem.setVisibility(View.GONE);
-                } else {
-                    subWorkListItem.setVisibility(View.VISIBLE);
-                }
+            if (subWorkListItem.getVisibility() == View.VISIBLE) {
+                subWorkListItem.setVisibility(View.GONE);
+            } else {
+                subWorkListItem.setVisibility(View.VISIBLE);
+            }
             }
         });
     }
@@ -460,11 +488,14 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
             char c = (char)(r.nextInt(26) + 'a');
             c = Character.toUpperCase(c);
 
-            int priority = (int) (Math.random() * 5 + 1);
+            int priority = (int) (Math.random() * 3 + 1);
             int randomNum = (int) (Math.random() * 15 + 1);
             int wardNum = (int) (Math.random() * 7 + 1);
+            int destNum = (int) (Math.random() * 7 + 1);
+            int destTransportModeNum = (int) (Math.random() * 3 + 1);
             int nameNum = (int) (Math.random() * names.length);
-            String wardID = wards[wardNum];
+            String wardID = wards[wardNum-1];
+            String destID = wards[destNum-1];
 
             String time = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 
@@ -480,7 +511,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
             PatientName.setValue(names[nameNum] +" "+ c+".");
 
             DatabaseReference Destination = Task.child("destination"); //Destiantion for task
-            Destination.setValue("Destination " + randomNum);
+            Destination.setValue(destID);
 
             DatabaseReference p = Task.child("priority"); //priority 1 - 5
             p.setValue(priority);
@@ -502,6 +533,9 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
 
             DatabaseReference searchValue = Task.child("searchValue"); //In progress Since Time
             searchValue.setValue(wardID + "_NO");
+
+            DatabaseReference transportMode = Task.child("transportMode"); //In progress Since Time
+            transportMode.setValue(destTransportModeNum);
         }
     }
 //--------------------------------------------------------------------------------------------------

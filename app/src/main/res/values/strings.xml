@@ -9,6 +9,11 @@
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_gallery">Gallery</string>
     <string name="icon_wheelchair">&#xf193;</string>
+    <string name="icon_bed">&#xf236;</string>
+    <string name="icon_walking">&#xf1ae;</string>
+    <string name="icon_right_arrow">&#xf178;</string>
+    <string name="icon_ellipsis">&#xf141;</string>
+
 
     <string name="image_picker_error">Something is wrong with that image. Pick a different one please.</string>
 
