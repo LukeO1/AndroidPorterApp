@@ -6,71 +6,121 @@
     android:layout_height="match_parent"
     tools:context="com.example.lucas.porterapp.PersonalScreenActivity">
 
-    <include
-        android:id="@+id/InProgressTextViewHolder"
-        layout="@layout/inprogress_view_layout"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
-        android:layout_marginEnd="8dp"
+    <TextView
+        android:id="@+id/InProgressHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="264dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:text="In Progress"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/sortBySpinner"
-        android:layout_width="189dp"
-        android:layout_height="25dp"
-        android:layout_marginBottom="8dp"
+    <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/inProgressViewFlipper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/CompletedListHeader"
-        app:layout_constraintEnd_toEndOf="@+id/InProgressTextViewHolder"
-        app:layout_constraintStart_toEndOf="@+id/CompletedListHeader"
-        app:layout_constraintTop_toTopOf="@+id/CompletedListHeader" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/InProgressHeader">
+
+        <include
+            android:id="@+id/InProgressTextViewHolder"
+            layout="@layout/inprogress_view_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InProgressHeader" />
+
+        <include
+            android:id="@+id/inProgressNoneView"
+            layout="@layout/none_inprogress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="158dp"
+            tools:layout_editor_absoluteY="215dp" />
+
+    </ViewFlipper>
+
+
+    <Spinner
+    android:id="@+id/sortBySpinner"
+    android:layout_width="189dp"
+    android:layout_height="25dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    app:layout_constraintBottom_toBottomOf="@+id/CompletedListHeader"
+    app:layout_constraintEnd_toEndOf="@+id/inProgressViewFlipper"
+    app:layout_constraintStart_toEndOf="@+id/CompletedListHeader"
+    app:layout_constraintTop_toTopOf="@+id/CompletedListHeader" />
 
     <TextView
-        android:id="@+id/CompletedListHeader"
-        android:layout_width="158dp"
-        android:layout_height="25dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Completed Tasks"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/InProgressTextViewHolder"
-        app:layout_constraintTop_toBottomOf="@+id/InProgressTextViewHolder" />
+    android:id="@+id/CompletedListHeader"
+    android:layout_width="158dp"
+    android:layout_height="25dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="16dp"
+    android:text="Completed Tasks"
+    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="@+id/PedometerHeaderView"
+    app:layout_constraintTop_toBottomOf="@+id/inProgressViewFlipper" />
 
     <ListView
-        android:id="@+id/CompletedListView"
-        android:layout_width="0dp"
-        android:layout_height="246dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CompletedListHeader" />
+    android:id="@+id/CompletedListView"
+    android:layout_width="0dp"
+    android:layout_height="246dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/CompletedListHeader" />
 
     <TextView
-        android:id="@+id/PedometerView"
-        android:layout_width="348dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Pedometer"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CompletedListView"
-        app:layout_constraintVertical_bias="0.423" />
+    android:id="@+id/PedometerHeaderView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:text="Daily Step Count"
+    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/CompletedListView" />
+
+    <TextView
+    android:id="@+id/PedometerView"
+    android:layout_width="0dp"
+    android:layout_height="41dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:text="Pedometer"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.507"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/PedometerHeaderView"
+    app:layout_constraintVertical_bias="0.0" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -175,8 +175,8 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         workListOriginView.setText("From " + model.getWard() + " " + iconArrow);
         workListDestinationView.setText(iconEllipsis + " " + iconArrow+ " To " + model.getDestination());
         workListTimerView.setText(model.getMinutes()+" Mins");
-        workListPatientIDView.setText(model.getPatientID());
-        workListPatientNameView.setText(model.getPatientName());
+        workListPatientIDView.setText("Patient: " + model.getPatientID());
+        workListPatientNameView.setText("Patient Name: " + model.getPatientName());
 
         // Set Icon for transport moder
         if(model.getTransportMode() == 1){

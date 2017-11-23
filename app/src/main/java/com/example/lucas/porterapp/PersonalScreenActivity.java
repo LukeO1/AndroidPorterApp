@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.Menu;
@@ -15,13 +18,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,11 +48,14 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     private SharedPreferences.Editor editor;
     private TaskInfo task, taskInfo;
     private ListView completedListView;
-    private TextView inProgressTextViewMain, inProgressTextViewSub;
+    private TextView inProgressOriginView, inProgressDestinationView, inProgressPatientIDView,
+            inProgressPatientNameView, inProgressTimerView, inProgressTransportModeIconView;
+    private ImageView inProgressTimerIcon;
     private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck", orderBy;
     private Spinner sortBySpinner;
-    private Button idScannerButton, confirmTaskButton;
+    private Button inProgressCameraButton, inProgressConfirmTaskButton;
     private boolean flag;
+    ViewFlipper inProgressViewFlipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +63,9 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         setContentView(R.layout.activity_personal_screen);
         getSupportActionBar().setTitle("Personal Work List");
 
-        // Initialize views used in code
-        View inProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
-        inProgressTextViewMain = (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTextViewMain));
-        inProgressTextViewSub = (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTextViewSub));
+        initializeInProgressViews();
+
         completedListView = (ListView) findViewById(R.id.CompletedListView);
-        idScannerButton = (Button) inProgressTextViewHolder.findViewById(R.id.idScannerLauncher);
-        confirmTaskButton = (Button) inProgressTextViewHolder.findViewById(R.id.confirmTaskButton);
 
         //Create a SQLite database
         myDB = new DatabaseHelper(this);
@@ -75,10 +78,8 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         if (i.hasExtra("taskObject")) {
 
             task = (TaskInfo) i.getSerializableExtra("taskObject");
-
             //Set Text to inProgress TextView
-            inProgressTextViewMain.setText(task.getWard() + " " + task.getTaskID());
-            inProgressTextViewSub.setText(task.getPatientName() + " " + task.getInProgress());
+            populateInProgressView(task);
 
             flag = false;
             new RespondOnFinish().execute();
@@ -86,6 +87,8 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         }else if(checkSelected){
             flag = true;
             new RespondOnFinish().execute();
+        }else if(!checkSelected){
+            inProgressViewFlipper.setDisplayedChild(1);
         }
 
         populateList(orderBy);
@@ -104,14 +107,85 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         sortBySpinner.setOnItemSelectedListener(this);
 
     }
+
+// -------------------------------------------------------------------------------------------------
+    public void initializeInProgressViews(){
+        // Initialize views used in code
+        View inProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
+
+        inProgressOriginView =
+                (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressOriginView));
+        inProgressDestinationView =
+                (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressDestinationView));
+        inProgressPatientNameView =
+                (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressPatientNameView));
+        inProgressPatientIDView =
+                (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressPatientIDView));
+        inProgressTimerView =
+                (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTimerView));
+        inProgressTransportModeIconView =
+                (TextView) inProgressTextViewHolder.findViewById((R.id.inProgressTransportModeIconView));
+
+        inProgressTimerIcon =
+                (ImageView) inProgressTextViewHolder.findViewById(R.id.inProgressTimerIcon);
+
+        inProgressCameraButton =
+                (Button) inProgressTextViewHolder.findViewById(R.id.inProgressCameraButton);
+        inProgressConfirmTaskButton =
+                (Button) inProgressTextViewHolder.findViewById(R.id.inProgressConfirmTaskButton);
+
+        inProgressViewFlipper = (ViewFlipper)findViewById(R.id.inProgressViewFlipper);
+    }
+
+// -------------------------------------------------------------------------------------------------
+    public void populateInProgressView(TaskInfo xTask){
+
+        Typeface font = Typeface.createFromAsset( getAssets(), "fontawesome-webfont.ttf" );
+
+        String iconWheelchair = getString(R.string.icon_wheelchair);
+        String iconBed = getString(R.string.icon_bed);
+        String iconWalking = getString(R.string.icon_walking);
+        String iconArrow = getString(R.string.icon_right_arrow);
+        String iconEllipsis = getString(R.string.icon_ellipsis);
+
+        inProgressOriginView.setText("From " + xTask.getWard());
+        inProgressDestinationView.setText(iconArrow+ " To " + xTask.getDestination());
+        inProgressTimerView.setText(xTask.getMinutes()+" Mins");
+        inProgressPatientNameView.setText("Name: " + xTask.getPatientName());
+        inProgressPatientIDView.setText("Patient ID: " + xTask.getPatientID());
+        // Set Icon for transport moder
+        if(xTask.getTransportMode() == 1){
+            inProgressTransportModeIconView.setText(iconWheelchair);
+        }else if(xTask.getTransportMode() == 2){
+            inProgressTransportModeIconView.setText(iconBed);
+        }else if(xTask.getTransportMode() == 3){
+            inProgressTransportModeIconView.setText(iconWalking);
+        }
+
+        // Set icon colour for priority
+        if(xTask.getPriority() == 1){
+            DrawableCompat.setTint(inProgressTimerIcon.getDrawable(),
+                    ContextCompat.getColor(getApplicationContext(), R.color.colourTimer1));
+        }else if(xTask.getPriority() == 2){
+            DrawableCompat.setTint(inProgressTimerIcon.getDrawable(),
+                    ContextCompat.getColor(getApplicationContext(), R.color.colourTimer2));
+        }else{
+            DrawableCompat.setTint(inProgressTimerIcon.getDrawable(),
+                    ContextCompat.getColor(getApplicationContext(), R.color.colourTimer3));
+        }
+
+        inProgressOriginView.setTypeface(font);
+        inProgressTransportModeIconView.setTypeface(font);
+        inProgressDestinationView.setTypeface(font);
+    }
 // -------------------------------------------------------------------------------------------------
 
     public void idScannerLauncher() {
 
-        idScannerButton.setOnClickListener(new View.OnClickListener() {
+        inProgressCameraButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                idScannerButton.setEnabled(false);
-                confirmTaskButton.setClickable(true);
+                inProgressCameraButton.setEnabled(false);
+                inProgressConfirmTaskButton.setClickable(true);
                 Toast.makeText(getApplicationContext(), "ID Scanner Launcher", Toast.LENGTH_SHORT).show();
             }
         });
@@ -120,17 +194,18 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     // ---------------------------------------------------------------------------------------------
     public void confirmTaskButtonListener() {
 
-        confirmTaskButton.setOnClickListener(new View.OnClickListener() {
+        inProgressConfirmTaskButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 boolean checkSelected = Boolean.parseBoolean(statusCheck());
                 if(checkSelected){
-                    inProgressTextViewMain.setText("None in Progress");
-                    inProgressTextViewSub.setText("");
+
+                    inProgressViewFlipper.setDisplayedChild(1);
                     confirmTask(taskInfo); //enter item into SQLite local database
                     statusEdit("false"); // set checkSelected to false so user can accept tasks again
                     populateList(orderBy); // refresh and populate completed listView
                     mRef.child(taskInfo.getTaskID()).removeValue(); //remove item from database
+
                 }else{
                     Toast.makeText(getApplicationContext(),
                         "No Task to confirm", Toast.LENGTH_SHORT).show();
@@ -180,8 +255,9 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     taskInfo = child.getValue(TaskInfo.class);
                     if(flag){
-                        inProgressTextViewMain.setText(taskInfo.getWard() + " " +
-                                taskInfo.getPatientName() + " " + taskInfo.getDestination());
+                        populateInProgressView(taskInfo);
+//                        inProgressTextViewMain.setText(taskInfo.getWard() + " " +
+//                                taskInfo.getPatientName() + " " + taskInfo.getDestination());
                     }
                 }
             }

@@ -3,70 +3,159 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
+
+
+    <!--<TextView-->
+    <!--android:id="@+id/inProgressTextViewMain"-->
+    <!--android:layout_width="230dp"-->
+    <!--android:layout_height="26dp"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:textSize="24sp"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/InProgressHeader" />-->
+
+
+    <!--<TextView-->
+    <!--android:id="@+id/inProgressTextViewSub"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="30dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:text="more info"-->
+    <!--app:layout_constraintEnd_toEndOf="@+id/inProgressTextViewMain"-->
+    <!--app:layout_constraintHorizontal_bias="1.0"-->
+    <!--app:layout_constraintStart_toStartOf="@+id/inProgressTextViewMain"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/inProgressTextViewMain" />-->
+
+
+    <!--<Button-->
+    <!--android:id="@+id/idScannerLauncher"-->
+    <!--android:layout_width="60dp"-->
+    <!--android:layout_height="60dp"-->
+    <!--android:layout_marginEnd="8dp"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="Cam"-->
+    <!--app:layout_constraintEnd_toStartOf="@+id/confirmTaskButton"-->
+    <!--app:layout_constraintStart_toEndOf="@+id/inProgressTextViewMain"-->
+    <!--app:layout_constraintTop_toTopOf="@+id/inProgressTextViewMain" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/confirmTaskButton"-->
+    <!--android:layout_width="60dp"-->
+    <!--android:layout_height="60dp"-->
+    <!--android:layout_marginEnd="8dp"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:clickable="false"-->
+    <!--android:text="OK"-->
+    <!--app:layout_constraintBottom_toBottomOf="@+id/idScannerLauncher"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toEndOf="@+id/idScannerLauncher"-->
+    <!--app:layout_constraintTop_toTopOf="@+id/idScannerLauncher" />-->
+
 
     <TextView
-        android:id="@+id/InProgressHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:id="@+id/inProgressOriginView"
+        android:layout_width="213dp"
+        android:layout_height="23dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="In Progress"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:text="From"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/inProgressTextViewMain"
-        android:layout_width="230dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="8dp"
+        android:id="@+id/inProgressDestinationView"
+        android:layout_width="0dp"
+        android:layout_height="18dp"
         android:layout_marginTop="8dp"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/InProgressHeader" />
+        android:text="To"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/inProgressOriginView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inProgressOriginView"
+        app:layout_constraintTop_toBottomOf="@+id/inProgressOriginView" />
 
+    <Button
+        android:id="@+id/inProgressCameraButton"
+        android:layout_width="70dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="@+id/inProgressDestinationView"
+        app:layout_constraintStart_toEndOf="@+id/inProgressOriginView"
+        app:layout_constraintTop_toTopOf="@+id/inProgressOriginView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/inProgressConfirmTaskButton"
+        android:layout_width="70dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="8dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="@+id/inProgressCameraButton"
+        app:layout_constraintEnd_toEndOf="@+id/inProgressTimerView"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toEndOf="@+id/inProgressCameraButton"
+        app:layout_constraintTop_toTopOf="@+id/inProgressCameraButton"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/inProgressTextViewSub"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:id="@+id/inProgressPatientNameView"
+        android:layout_width="152dp"
+        android:layout_height="21dp"
         android:layout_marginTop="8dp"
-        android:text="more info"
-        app:layout_constraintEnd_toEndOf="@+id/inProgressTextViewMain"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/inProgressTextViewMain"
-        app:layout_constraintTop_toBottomOf="@+id/inProgressTextViewMain" />
+        android:text="patientName"
+        app:layout_constraintStart_toStartOf="@+id/inProgressDestinationView"
+        app:layout_constraintTop_toBottomOf="@+id/inProgressDestinationView" />
 
+    <TextView
+        android:id="@+id/inProgressPatientIDView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="patient ID"
+        app:layout_constraintEnd_toEndOf="@+id/inProgressPatientNameView"
+        app:layout_constraintStart_toStartOf="@+id/inProgressPatientNameView"
+        app:layout_constraintTop_toBottomOf="@+id/inProgressPatientNameView" />
 
-    <Button
-        android:id="@+id/idScannerLauncher"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <TextView
+        android:id="@+id/inProgressTransportModeIconView"
+        android:layout_width="42dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/inProgressPatientIDView"
+        app:layout_constraintStart_toEndOf="@+id/inProgressPatientIDView"
+        app:layout_constraintTop_toTopOf="@+id/inProgressPatientNameView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/inProgressTimerIcon"
+        android:layout_width="39dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/inProgressTransportModeIconView"
+        app:layout_constraintStart_toEndOf="@+id/inProgressTransportModeIconView"
+        app:layout_constraintTop_toTopOf="@+id/inProgressTransportModeIconView"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_timer" />
+
+    <TextView
+        android:id="@+id/inProgressTimerView"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_weight="1"
-        android:text="Cam"
-        app:layout_constraintEnd_toStartOf="@+id/confirmTaskButton"
-        app:layout_constraintStart_toEndOf="@+id/inProgressTextViewMain"
-        app:layout_constraintTop_toTopOf="@+id/inProgressTextViewMain" />
-
-    <Button
-        android:id="@+id/confirmTaskButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:clickable="false"
-        android:text="OK"
-        app:layout_constraintBottom_toBottomOf="@+id/idScannerLauncher"
+        android:text="Timer"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/inProgressTransportModeIconView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/idScannerLauncher"
-        app:layout_constraintTop_toTopOf="@+id/idScannerLauncher" />
-
-
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/inProgressTimerIcon" />
 </android.support.constraint.ConstraintLayout>
