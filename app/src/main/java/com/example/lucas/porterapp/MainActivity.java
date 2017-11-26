@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println("!!!!!STEP!!!!!");
+//        System.out.println("!!!!!STEP!!!!!");
         myDB.countStep();
 //        if (activityRunning) {
 //            count.setText(String.valueOf(event.values[0]));

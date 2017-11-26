@@ -51,7 +51,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     private TaskInfo task, taskInfo;
     private ListView completedListView;
     private TextView inProgressOriginView, inProgressDestinationView, inProgressPatientIDView,
-            inProgressPatientNameView, inProgressTimerView, inProgressTransportModeIconView;
+            inProgressPatientNameView, inProgressTimerView, inProgressTransportModeIconView, paedoCount;
     private ImageView inProgressTimerIcon;
     private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck", orderBy;
     private Spinner sortBySpinner;
@@ -108,6 +108,15 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
         sortBySpinner.setAdapter(adapter);
         sortBySpinner.setOnItemSelectedListener(this);
+
+        paedoCount = (TextView) findViewById(R.id.PedometerView);
+
+
+    }
+
+    public void updatePaedo(){
+        int count = myDB.getSteps();
+        paedoCount.setText(count);
 
     }
 
@@ -268,12 +277,19 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
             }
 
             @Override
-            public void onStart() {}
+            public void onStart() {
+            }
 
             @Override
             public void onFailure() {}
         });
         return taskInfo;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        updatePaedo();
     }
     // ---------------------------------------------------------------------------------------------
     /**
