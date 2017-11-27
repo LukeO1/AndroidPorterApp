@@ -67,6 +67,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
         cursor.moveToFirst();
+//        cursor.getColumnNames();
+//        System.out.println("NEW COUNT: " + cursor.getInt(2));
+//        return 1;
         return cursor.getInt(2);
     }
 

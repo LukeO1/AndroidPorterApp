@@ -116,7 +116,8 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
     public void updatePaedo(){
         int count = myDB.getSteps();
-        paedoCount.setText(count);
+//        System.out.println("COunt at: " + count);
+        paedoCount.setText("Steps: " + count);
 
     }
 
