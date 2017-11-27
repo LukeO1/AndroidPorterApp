@@ -94,8 +94,8 @@ public class PhoneDirectory extends AppCompatActivity {
                 Toast.makeText(this, "Contacts", Toast.LENGTH_LONG).show();
                 break;
             case R.id.menu_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
-                intent = new Intent(this, Settings.class);
+                Toast.makeText(this, "Dropdown", Toast.LENGTH_LONG).show();
+                intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
             case R.id.menu_sign_out:

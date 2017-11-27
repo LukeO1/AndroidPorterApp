@@ -63,6 +63,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     }
 
+    public int getSteps(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
+        cursor.moveToFirst();
+        return cursor.getInt(2);
+    }
+
     public void countStep(){
 //        System.out.println("COUNTED!!!!!");
         SQLiteDatabase db = this.getReadableDatabase();

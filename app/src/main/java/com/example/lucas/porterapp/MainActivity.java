@@ -27,7 +27,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
-//public class MainActivity extends AppCompatActivity{
+    //public class MainActivity extends AppCompatActivity{
     private EditText mEmail;
     private EditText mPassword;
     private Button mLogin;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println("!!!!!STEP!!!!!");
+//        System.out.println("!!!!!STEP!!!!!");
         myDB.countStep();
 //        if (activityRunning) {
 //            count.setText(String.valueOf(event.values[0]));

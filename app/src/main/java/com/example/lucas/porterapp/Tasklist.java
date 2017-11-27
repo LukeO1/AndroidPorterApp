@@ -354,13 +354,12 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
-                intent = new Intent(this, Settings.class);
+                Toast.makeText(this, "Dropdown", Toast.LENGTH_LONG).show();
+                intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
             case R.id.menu_sign_out:
                 Toast.makeText(this, MainActivity.mAuth.toString(), Toast.LENGTH_LONG).show();
-
                 (MainActivity.mAuth).getInstance().signOut();
                 startActivity(new Intent(Tasklist.this, MainActivity.class));
                 finish();

@@ -7,14 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class Settings extends AppCompatActivity {
+public class Dropdown extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        getSupportActionBar().setTitle("Settings");
+        getSupportActionBar().setTitle("Dropdown");
     }
 
     @Override
@@ -45,14 +45,16 @@ public class Settings extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Dropdown", Toast.LENGTH_LONG).show();
+                intent = new Intent(this, settingspage.class);
+                startActivity(intent);
                 break;
-            case R.id.menu_sign_out:
-                Toast.makeText(this, "Sign Out", Toast.LENGTH_LONG).show();
-                (MainActivity.mAuth).getInstance().signOut();
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                break;
+//            case R.id.menu_sign_out:
+//                Toast.makeText(this, "Sign Out", Toast.LENGTH_LONG).show();
+//                (MainActivity.mAuth).getInstance().signOut();
+//                startActivity(new Intent(this, MainActivity.class));
+//                finish();
+//                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

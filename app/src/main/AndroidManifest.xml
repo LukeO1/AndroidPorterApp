@@ -43,8 +43,10 @@
 
         <activity android:name=".BarcodeScanner" />
         <activity android:name=".PhoneDirectory" />
+        <activity android:name=".settingspage" />
+
         <activity android:name=".PersonalScreenActivity" />
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".Dropdown"></activity>
     </application>
 
 </manifest>

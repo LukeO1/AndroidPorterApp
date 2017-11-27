@@ -51,7 +51,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     private TaskInfo task, taskInfo;
     private ListView completedListView;
     private TextView inProgressOriginView, inProgressDestinationView, inProgressPatientIDView,
-            inProgressPatientNameView, inProgressTimerView, inProgressTransportModeIconView;
+            inProgressPatientNameView, inProgressTimerView, inProgressTransportModeIconView, paedoCount;
     private ImageView inProgressTimerIcon;
     private String CHECK_STATUS = "com.example.lucas.porterapp.StatusCheck", orderBy;
     private Spinner sortBySpinner;
@@ -109,9 +109,18 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         sortBySpinner.setAdapter(adapter);
         sortBySpinner.setOnItemSelectedListener(this);
 
+        paedoCount = (TextView) findViewById(R.id.PedometerView);
+
+
     }
 
-// -------------------------------------------------------------------------------------------------
+    public void updatePaedo(){
+        int count = myDB.getSteps();
+        paedoCount.setText(count);
+
+    }
+
+    // -------------------------------------------------------------------------------------------------
     public void initializeInProgressViews(){
         // Initialize views used in code
         View inProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
@@ -142,7 +151,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         inProgressViewFlipper = (ViewFlipper)findViewById(R.id.inProgressViewFlipper);
     }
 
-// -------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------
     public void populateInProgressView(TaskInfo xTask){
 
         Typeface font = Typeface.createFromAsset( getAssets(), "fontawesome-webfont.ttf" );
@@ -213,7 +222,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
                 }else{
                     Toast.makeText(getApplicationContext(),
-                        "No Task to confirm", Toast.LENGTH_SHORT).show();
+                            "No Task to confirm", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -268,12 +277,19 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
             }
 
             @Override
-            public void onStart() {}
+            public void onStart() {
+            }
 
             @Override
             public void onFailure() {}
         });
         return taskInfo;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        updatePaedo();
     }
     // ---------------------------------------------------------------------------------------------
     /**
@@ -421,7 +437,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
                 break;
             case R.id.menu_settings:
                 Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
-                intent = new Intent(this, Settings.class);
+                intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
             case R.id.menu_sign_out:
@@ -437,7 +453,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         return true;
     }
 
-// -------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------
     class RespondOnFinish extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -476,18 +492,18 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_BARCODE_RESULT && resultCode == CommonStatusCodes.SUCCESS){
-                if(data!=null){
-                    Barcode barcode = data.getParcelableExtra("barcode");
-                    if(currentPatientID.equals(barcode.displayValue)){
-                        inProgressCameraButton.setEnabled(false);
-                        inProgressConfirmTaskButton.setEnabled(true);
-                        Toast.makeText(this, "Barcode successfully detected!", Toast.LENGTH_LONG).show();
-                    }else{
-                        Toast.makeText(this, "Incorrect barcode detected!", Toast.LENGTH_LONG).show();
-                    }
+            if(data!=null){
+                Barcode barcode = data.getParcelableExtra("barcode");
+                if(currentPatientID.equals(barcode.displayValue)){
+                    inProgressCameraButton.setEnabled(false);
+                    inProgressConfirmTaskButton.setEnabled(true);
+                    Toast.makeText(this, "Barcode successfully detected!", Toast.LENGTH_LONG).show();
                 }else{
-                    Toast.makeText(this, "No barcode detected from camera", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Incorrect barcode detected!", Toast.LENGTH_LONG).show();
                 }
+            }else{
+                Toast.makeText(this, "No barcode detected from camera", Toast.LENGTH_LONG).show();
+            }
 
         }
 
