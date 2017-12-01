@@ -50,7 +50,7 @@
         <activity android:name=".PhoneDirectory"
             android:screenOrientation="portrait"
             />
-        <activity android:name=".settingspage"
+        <activity android:name=".SettingsPage"
             android:screenOrientation="portrait"
             />
 

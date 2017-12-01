@@ -444,7 +444,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
                 break;
             case R.id.menu_settings:
                 Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
-                intent = new Intent(this, settingspage.class);
+                intent = new Intent(this, SettingsPage.class);
                 startActivity(intent);
                 break;
             case R.id.menu_about:

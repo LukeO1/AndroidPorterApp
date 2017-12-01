@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class Dropdown extends AppCompatActivity {
 
@@ -42,7 +41,7 @@ public class Dropdown extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                intent = new Intent(this, settingspage.class);
+                intent = new Intent(this, SettingsPage.class);
                 startActivity(intent);
                 break;
 //            case R.id.menu_sign_out:

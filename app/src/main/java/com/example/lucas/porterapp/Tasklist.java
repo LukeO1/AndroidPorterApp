@@ -2,10 +2,7 @@ package com.example.lucas.porterapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -83,7 +79,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
         firebasePopulateView(queryRef);
 
-        populateDatabase(); //UnComment to populate the db with randomly generated tasks
+//        populateDatabase(); //UnComment to populate the db with randomly generated tasks
 
 
         firebaseFilterSpinner = (Spinner) findViewById(R.id.firebaseFilterSpinner);
@@ -351,7 +347,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                intent = new Intent(this, settingspage.class);
+                intent = new Intent(this, SettingsPage.class);
                 startActivity(intent);
                 break;
             case R.id.menu_about:
