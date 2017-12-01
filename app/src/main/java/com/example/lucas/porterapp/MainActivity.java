@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private DatabaseHelper myDB;
 
+
     private TextView barcodeResult;
+    ImageView imgClick;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -67,13 +70,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
 
-        Button callTechnicalSupport = (Button) findViewById(R.id.techSupportButton);
-        callTechnicalSupport.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                callTechnicalSupport(view);
-            }
-        });
+
+
         myDB = new DatabaseHelper(this);
 //        SQLiteDatabase newdb = db.getWritableDatabase();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -110,6 +108,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onStart(){
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        imgClick = (ImageView)findViewById(R.id.imageView);
+        imgClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:011234567" ));
+                startActivity(intent);
+            }
+        });
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -167,10 +174,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     // ---------------------------------------------------------------------------------------------
 
-    public void callTechnicalSupport(View v){
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:011234567" ));
-        startActivity(intent);
-    }
+
 
 }
+
+
