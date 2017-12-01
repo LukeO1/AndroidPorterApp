@@ -41,7 +41,7 @@ public class Dropdown extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                intent = new Intent(this, SettingsPage.class);
+                intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
 //            case R.id.menu_sign_out:

@@ -108,7 +108,7 @@ public class PhoneDirectory extends AppCompatActivity {
             case R.id.menu_contacts:
                 break;
             case R.id.menu_settings:
-                intent = new Intent(this, SettingsPage.class);
+                intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
             case R.id.menu_about:

@@ -23,7 +23,7 @@ package com.example.lucas.porterapp;
         import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.auth.FirebaseUser;
 
-public class SettingsPage extends AppCompatActivity {
+public class settingspage extends AppCompatActivity {
 
     private Button btnChangePassword, changePassword, logoutofapp;
     private EditText password, newPassword;
@@ -77,7 +77,7 @@ public class SettingsPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 (MainActivity.mAuth).getInstance().signOut();
-                startActivity(new Intent(SettingsPage.this, MainActivity.class));
+                startActivity(new Intent(settingspage.this, MainActivity.class));
                 finish();
             }
         });
@@ -105,10 +105,10 @@ public class SettingsPage extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(SettingsPage.this, "Password is updated!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(settingspage.this, "Password is updated!", Toast.LENGTH_SHORT).show();
 
                                         } else {
-                                            Toast.makeText(SettingsPage.this, "Failed to update password!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(settingspage.this, "Failed to update password!", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -162,7 +162,7 @@ public class SettingsPage extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                intent = new Intent(this, SettingsPage.class);
+                intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
             case R.id.menu_about:
