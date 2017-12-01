@@ -18,17 +18,9 @@
   <component name="ChangeListManager">
     <list default="true" id="1661384d-169e-4c60-931f-1e39ec0c3aa5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/About.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/About.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/Dropdown.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/Dropdown.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/PersonalScreenActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/PersonalScreenActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/PhoneDirectory.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/PhoneDirectory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/Tasklist.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/Tasklist.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/MainActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/settingspage.java" afterPath="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/settingspage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/layout/about.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/about.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/layout/settingslayout.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/settingslayout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" afterPath="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -48,12 +40,12 @@
       <file leaf-file-name="About.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/About.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="78" column="22" lean-forward="false" selection-start-line="78" selection-start-column="18" selection-end-line="78" selection-end-column="22" />
+            <state relative-caret-position="380">
+              <caret line="38" column="19" lean-forward="true" selection-start-line="38" selection-start-column="19" selection-end-line="38" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#883#1409#0" expanded="true" />
-                <element signature="e#1408#1409#0" expanded="true" />
+                <element signature="e#984#1550#0" expanded="true" />
+                <element signature="e#1549#1550#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -89,13 +81,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="29" column="13" lean-forward="false" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+            <state relative-caret-position="2340">
+              <caret line="156" column="54" lean-forward="false" selection-start-line="156" selection-start-column="54" selection-end-line="156" selection-end-column="54" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1967#2323#0" expanded="true" />
+                <element signature="e#2322#2323#0" expanded="true" />
+                <element signature="e#2360#2507#0" expanded="true" />
+                <element signature="e#2506#2507#0" expanded="true" />
+                <element signature="e#3992#4271#0" expanded="true" />
+                <element signature="e#4270#4271#0" expanded="true" />
+                <element signature="e#4902#5252#0" expanded="true" />
+                <element signature="e#5251#5252#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -104,20 +104,32 @@
       <file leaf-file-name="settingspage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/settingspage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="470">
-              <caret line="173" column="0" lean-forward="false" selection-start-line="173" selection-start-column="0" selection-end-line="178" selection-end-column="22" />
+            <state relative-caret-position="365">
+              <caret line="50" column="21" lean-forward="true" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
               <folding>
+                <element signature="e#0#44#0" expanded="true" />
                 <element signature="imports" expanded="true" />
+                <element signature="e#1797#1798#0" expanded="true" />
+                <element signature="e#2418#2704#0" expanded="true" />
+                <element signature="e#2703#2704#0" expanded="true" />
+                <element signature="e#2795#3084#0" expanded="true" />
+                <element signature="e#3083#3084#0" expanded="true" />
+                <element signature="e#3190#4595#0" expanded="true" />
+                <element signature="e#3719#4388#0" expanded="true" />
+                <element signature="e#4387#4388#0" expanded="true" />
+                <element signature="e#4594#4595#0" expanded="true" />
+                <element signature="e#4655#4656#0" expanded="true" />
+                <element signature="e#4687#4688#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settingslayout.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="settingslayout.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/res/layout/settingslayout.xml">
           <provider editor-type-id="text-editor">
             <state relative-caret-position="338">
-              <caret line="35" column="49" lean-forward="true" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
+              <caret line="35" column="49" lean-forward="false" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -172,8 +184,8 @@
       <find>grav</find>
       <find>button</find>
       <find>click</find>
-      <find>toas</find>
       <find>oas</find>
+      <find>toas</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -1925,7 +1937,6 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/src/main/res/values/colors.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/MainActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/Dropdown.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_personal_screen.xml" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_tasklist.xml" />
@@ -1935,12 +1946,13 @@
         <option value="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/PhoneDirectory.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/PersonalScreenActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/About.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/fadeout.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/Tasklist.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/about.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/settingspage.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/settingslayout.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/About.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/settingspage.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -2198,7 +2210,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512136147157" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512137377694" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2246,7 +2258,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512136147157" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512137377694" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2429,7 +2441,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512136147158" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512137377694" />
       </method>
     </configuration>
     <list size="1">
@@ -2720,36 +2732,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="29" column="13" lean-forward="false" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/About.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="78" column="22" lean-forward="false" selection-start-line="78" selection-start-column="18" selection-end-line="78" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#883#1409#0" expanded="true" />
-            <element signature="e#1408#1409#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/Tasklist.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1931">
-          <caret line="357" column="0" lean-forward="false" selection-start-line="357" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/TaskInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-997">
@@ -2793,25 +2775,75 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/settingspage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="470">
-          <caret line="173" column="0" lean-forward="false" selection-start-line="173" selection-start-column="0" selection-end-line="178" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/settingslayout.xml">
       <provider editor-type-id="text-editor">
         <state relative-caret-position="338">
-          <caret line="35" column="49" lean-forward="true" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
+          <caret line="35" column="49" lean-forward="false" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
           <folding />
         </state>
       </provider>
       <provider selected="true" editor-type-id="android-designer2">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/Tasklist.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1931">
+          <caret line="357" column="0" lean-forward="false" selection-start-line="357" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/About.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="38" column="19" lean-forward="true" selection-start-line="38" selection-start-column="19" selection-end-line="38" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#984#1550#0" expanded="true" />
+            <element signature="e#1549#1550#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/settingspage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="50" column="21" lean-forward="true" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#44#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1797#1798#0" expanded="true" />
+            <element signature="e#2418#2704#0" expanded="true" />
+            <element signature="e#2703#2704#0" expanded="true" />
+            <element signature="e#2795#3084#0" expanded="true" />
+            <element signature="e#3083#3084#0" expanded="true" />
+            <element signature="e#3190#4595#0" expanded="true" />
+            <element signature="e#3719#4388#0" expanded="true" />
+            <element signature="e#4387#4388#0" expanded="true" />
+            <element signature="e#4594#4595#0" expanded="true" />
+            <element signature="e#4655#4656#0" expanded="true" />
+            <element signature="e#4687#4688#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/lucas/porterapp/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2340">
+          <caret line="156" column="54" lean-forward="false" selection-start-line="156" selection-start-column="54" selection-end-line="156" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1967#2323#0" expanded="true" />
+            <element signature="e#2322#2323#0" expanded="true" />
+            <element signature="e#2360#2507#0" expanded="true" />
+            <element signature="e#2506#2507#0" expanded="true" />
+            <element signature="e#3992#4271#0" expanded="true" />
+            <element signature="e#4270#4271#0" expanded="true" />
+            <element signature="e#4902#5252#0" expanded="true" />
+            <element signature="e#5251#5252#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>
