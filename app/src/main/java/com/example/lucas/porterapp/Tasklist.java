@@ -83,7 +83,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
         firebasePopulateView(queryRef);
 
-        populateDatabase(); //UnComment to populate the db with randomly generated tasks
+//        populateDatabase(); //UnComment to populate the db with randomly generated tasks
 
 
         firebaseFilterSpinner = (Spinner) findViewById(R.id.firebaseFilterSpinner);
