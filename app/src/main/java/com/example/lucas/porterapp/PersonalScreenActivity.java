@@ -428,6 +428,11 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
     // ---------------------------------------------------------------------------------------------
 
+    /**
+     * Inflate the main_menu; this adds items to the action bar if it is present.
+     * @param menu a menu object
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the main_menu; this adds items to the action bar if it is present.
@@ -435,6 +440,11 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         return true;
     }
 
+    /**
+     * Dependent on the option selected by the user, this method brings the user to the chosen activity
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;

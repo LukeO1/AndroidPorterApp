@@ -24,6 +24,8 @@ public class TaskInfo implements Serializable {
     private String searchValue;
     private int transportMode;
 
+
+    // Constructors --------------------------------------------------------------------------------
     public TaskInfo() {
     }
 
@@ -44,45 +46,9 @@ public class TaskInfo implements Serializable {
         this.transportMode = transportMode;
     }
 
+    // Getter methods ------------------------------------------------------------------------------
     public String getTaskID(){
         return taskID;
-    }
-
-    public void setTaskID(String taskID){
-        this.taskID = taskID;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public void setpatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public String getWard() {
-        return ward;
-    }
-
-    public void setWard(String ward) {
-        this.ward = ward;
-    }
-
-    public int getPriority(){
-
-        return priority;
-    }
-
-    public void setPriority(int priority){
-        this.priority = priority;
     }
 
     public String getTimeStamp(){
@@ -105,51 +71,92 @@ public class TaskInfo implements Serializable {
         return minutes;
     }
 
-    public void setTimeStamp(String timeStamp){
-        this.timeStamp = timeStamp;
+    public String getDestination() {
+        return destination;
     }
 
-    public String getInProgress(){
-        return inProgress;
+    public String getPatientName() {
+        return patientName;
     }
 
-    public void setInProgress(String inProgress){
-        this.inProgress = inProgress;
+    public int getPriority(){
+
+        return priority;
     }
 
-    public long getInProgressSince(){
-        return inProgressSince;
-    }
-
-    public void setInProgressSince(long inProgressSince){
-        this.inProgressSince = inProgressSince;
-    }
-
-    public String getUserID(){
-        return userID;
-    }
-
-    public void setUserID(String userID){
-        this.userID = userID;
+    public String getWard() {
+        return ward;
     }
 
     public String getPatientID(){
         return patientID;
     }
 
-    public void setPatientID(){
-        this.patientID = patientID;
+    public int getTransportMode(){
+        return transportMode;
+    }
+
+    public String getUserID(){
+        return userID;
+    }
+
+    public long getInProgressSince(){
+        return inProgressSince;
+    }
+
+    public String getInProgress(){
+        return inProgress;
     }
 
     public String getSearchValue(){
         return searchValue;
     }
 
+
+    // Setter Methods ------------------------------------------------------------------------------
+    public void setTaskID(String taskID){
+        this.taskID = taskID;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setpatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
+    public void setPriority(int priority){
+        this.priority = priority;
+    }
+
+    public void setTimeStamp(String timeStamp){
+        this.timeStamp = timeStamp;
+    }
+
+    public void setInProgress(String inProgress){
+        this.inProgress = inProgress;
+    }
+
+    public void setInProgressSince(long inProgressSince){
+        this.inProgressSince = inProgressSince;
+    }
+
+    public void setUserID(String userID){
+        this.userID = userID;
+    }
+
+    public void setPatientID(){
+        this.patientID = patientID;
+    }
+
     public void setSearchValue(){
         this.searchValue = searchValue;
     }
 
-    public int getTransportMode(){
-        return transportMode;
-    }
+
 }

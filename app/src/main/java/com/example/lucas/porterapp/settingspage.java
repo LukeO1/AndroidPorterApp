@@ -1,11 +1,4 @@
-/**
- * Created by karlroe on 26/11/2017.
- */
-
-
-
 package com.example.lucas.porterapp;
-
 
         import android.content.Intent;
         import android.support.annotation.NonNull;
@@ -23,16 +16,15 @@ package com.example.lucas.porterapp;
         import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.auth.FirebaseUser;
 
-
+/**
+ * Settings Activity that allwows user to change password or sign out
+ */
 public class settingspage extends AppCompatActivity {
 
     private Button btnChangePassword, changePassword, logoutofapp;
     private EditText password, newPassword;
-
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
-
-
 
 
     @Override
@@ -54,14 +46,12 @@ public class settingspage extends AppCompatActivity {
                 }
             }
         };
+
         //create button to change password
         btnChangePassword = (Button) findViewById(R.id.bChangePassword);
 
         password = (EditText) findViewById(R.id.etPassword);
         newPassword = (EditText) findViewById(R.id.etnewPassword);
-
-
-
 
 
         //set visibility constraints
@@ -70,8 +60,6 @@ public class settingspage extends AppCompatActivity {
         changePassword = (Button) findViewById(R.id.button5);
         logoutofapp = (Button) findViewById(R.id.bLogout);
         changePassword.setVisibility(View.GONE);
-
-
 
         //call function to lo
         logoutofapp.setOnClickListener(new View.OnClickListener() {
@@ -122,10 +110,7 @@ public class settingspage extends AppCompatActivity {
         });
 
 
-
-
     }
-
 
 
     @Override

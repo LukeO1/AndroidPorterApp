@@ -3,7 +3,7 @@ package com.example.lucas.porterapp;
 import com.google.firebase.database.DataSnapshot;
 
 /**
- * Created by lucas on 21/11/2017.
+ * Interface for on get data listener.
  * Retrieved from https://stackoverflow.com/questions/30659569/wait-until-firebase-retrieves-data
  */
 

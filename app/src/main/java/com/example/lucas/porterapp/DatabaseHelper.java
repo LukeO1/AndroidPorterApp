@@ -66,9 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             ContentValues contentValues = new ContentValues();
             contentValues.put(STEPS_TAKEN, 0);
             db.insert(TABLE_PEDOMETER, null, contentValues);
-
         }
-
     }
 
     /**
@@ -89,8 +87,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public void countStep(){
         SQLiteDatabase db = this.getReadableDatabase();
         db.execSQL("UPDATE " + TABLE_PEDOMETER + " SET STEPS_TAKEN = STEPS_TAKEN + 1;");
-
-
     }
 
     /**
@@ -108,6 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
 // -------------------------------------------------------------------------------------------------
 
+    //Method to insert task detail into SQlite table
     public boolean insertDataCompleted(String taskId, String wardName, String patientName,
                                        String destination, String timeStampCreated,
                                        String timeStampCompleted, String timeTaken, String userID){

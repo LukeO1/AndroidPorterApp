@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // intialize views for login feature
         mEmail = (EditText) findViewById(R.id.emailField);
         mPassword = (EditText) findViewById(R.id.passwordField);
         mLogin = (Button) findViewById(R.id.login);
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                // check and authenticate login details
                 if (firebaseAuth.getCurrentUser() != null) {
                     startActivity(new Intent(MainActivity.this, Tasklist.class));
                     finish();
@@ -65,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 startSignIn();
             }
         });
-
-
 
         // creates a database manager
         myDB = new DatabaseHelper(this);
@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     // ---------------------------------------------------------------------------------------------
 
+    /**
+     * Assist user through a sign in process. displays toast if required information are not provided
+     */
     private void startSignIn() {
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();

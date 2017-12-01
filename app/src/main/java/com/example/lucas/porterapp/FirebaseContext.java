@@ -5,11 +5,9 @@ import android.app.Application;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 /**
- * Created by lucas on 05/11/2017.
+ * Used to store the firebase context for the database
  */
-
 public class FirebaseContext extends Application{
     @Override
     public void onCreate(){
