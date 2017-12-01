@@ -33,9 +33,11 @@ public class BarcodeScanner extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // onCreate method called when activity created
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanner);
 
+        // sets the Title
         getSupportActionBar().setTitle("ID Scanner");
 
         // assign the camera barcode scanner to scanner
@@ -49,6 +51,7 @@ public class BarcodeScanner extends AppCompatActivity {
      * set up the camera source with the barcode detector.
      * enable autofocus and set the preview size field
      * detect and read barcode, send the result back to the calling activity
+     * reference: https://www.youtube.com/watch?v=czmEC5akcos
      */
     private void setupCamera() {
 
@@ -80,12 +83,13 @@ public class BarcodeScanner extends AppCompatActivity {
 
             @Override
             public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
+                // method required
             }
 
-            // stop the camera when the SurfaceView scanner is destroyed
+
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+                // stop the camera when the SurfaceView scanner is destroyed
                 cameraSource.stop();
             }
         });

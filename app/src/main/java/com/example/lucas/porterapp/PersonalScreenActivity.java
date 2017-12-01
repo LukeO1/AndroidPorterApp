@@ -94,7 +94,9 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
             inProgressViewFlipper.setDisplayedChild(1);
         }
 
+        // populates the completed list by the chosen sort order
         populateList(orderBy);
+        // launches the ID scanner
         idScannerLauncher();
         confirmTaskButtonListener();
 
@@ -201,6 +203,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 // -------------------------------------------------------------------------------------------------
 
     public void idScannerLauncher() {
+        // launches the barcode scanner
 
         inProgressCameraButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -210,6 +213,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     }
 
     // ---------------------------------------------------------------------------------------------
+
     public void confirmTaskButtonListener() {
 
         inProgressConfirmTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -349,16 +353,14 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     // ---------------------------------------------------------------------------------------------
 
     public void populateList(String orderBy){
-
-        Context context = getApplicationContext();
-        Toast.makeText(context, orderBy, Toast.LENGTH_LONG);
+        // populates the completed task list by the orderBy value
         CursorAdapter adapter;
 
         Cursor cursor = myDB.createCursor(orderBy);
         if(cursor != null) {
             adapter = new CursorAdapter(this, R.layout.row_layout_completed, cursor, 0 );
             completedListView.setAdapter(adapter);
-        } else {}
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -372,11 +374,6 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         Toast.makeText(context, selectedOrderBy, Toast.LENGTH_SHORT).show();
 
         switch(selectedOrderBy){
-            case("Patient ID"): {
-                orderBy = "TASK_ID"; // NEEDS TO BE CHANGED ONCE DATABASE UPDATED
-                populateList(orderBy);
-                break;
-            }
             case("Patient Name"):{
                 orderBy = "PATIENT_NAME";
                 populateList(orderBy);
@@ -429,26 +426,21 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         Intent intent;
         switch(item.getItemId()) {
             case R.id.menu_tasklist:
-                Toast.makeText(this, "Tasklist", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, Tasklist.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.menu_my_page:
-                Toast.makeText(this, "My Page", Toast.LENGTH_LONG).show();
                 break;
             case R.id.menu_contacts:
-                Toast.makeText(this, "Contacts", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, PhoneDirectory.class);
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
             case R.id.menu_about:
-                Toast.makeText(this, "About", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(this, About.class));
                 finish();
             default:
@@ -494,14 +486,15 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     // ---------------------------------------------------------------------------------------------
 
     // get the result of the barcode back rom the BarcodeScanner
+    // reference https://www.youtube.com/watch?v=czmEC5akcos
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_BARCODE_RESULT && resultCode == CommonStatusCodes.SUCCESS){
             if(data!=null){
                 Barcode barcode = data.getParcelableExtra("barcode");
                 if(currentPatientID.equals(barcode.displayValue)){
-                    inProgressCameraButton.setEnabled(false);
-                    inProgressConfirmTaskButton.setEnabled(true);
+                    inProgressCameraButton.setEnabled(false); // disables the camera button once the barcode is verified
+                    inProgressConfirmTaskButton.setEnabled(true); // enables the confirm task button once the barcode is verified
                     Toast.makeText(this, "Barcode successfully detected!", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(this, "Incorrect barcode detected!", Toast.LENGTH_LONG).show();

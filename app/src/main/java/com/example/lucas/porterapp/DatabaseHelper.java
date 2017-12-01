@@ -133,6 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 // -------------------------------------------------------------------------------------------------
     /**
      * Query all data from the database and store in a cursor
+     * @param orderBy a string from the dialogue in the personal activity to sort the completed database in specified order - always descending
      * @return
      */
     public Cursor createCursor(String orderBy) {
