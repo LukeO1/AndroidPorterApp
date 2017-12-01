@@ -17,9 +17,16 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+/**
+ * Barcode Scanner that is used to scan patient band data to verify that the patient has been collected
+ * from their ward etc.
+ */
+
 public class BarcodeScanner extends AppCompatActivity {
+    // uses SurfaceView to view live camera feed
     SurfaceView scanner;
 
+    // sets the camera permissions request to return barcode result to correct request
     public static final int CAMERA_PERMISSIONS_REQUEST = 0;
 
     // ---------------------------------------------------------------------------------------------
