@@ -27,7 +27,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener{
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
     //public class MainActivity extends AppCompatActivity{
     private EditText mEmail;
     private EditText mPassword;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         // creates Sensor to monitor steps for pedometer feature
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
@@ -94,29 +94,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * Listens for a step and calls DB method to add to pedometer count
      */
     public void onSensorChanged(SensorEvent event) {
-//        System.out.println("!!!!!STEP!!!!!");
+        //        System.out.println("!!!!!STEP!!!!!");
         myDB.countStep();
-//        if (activityRunning) {
-//            count.setText(String.valueOf(event.values[0]));
-//        }
+        //        if (activityRunning) {
+        //            count.setText(String.valueOf(event.values[0]));
+        //        }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
     // ---------------------------------------------------------------------------------------------
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-        imgClick = (ImageView)findViewById(R.id.imageView);
+        imgClick = (ImageView) findViewById(R.id.imageView);
         imgClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:011234567" ));
+                intent.setData(Uri.parse("tel:011234567"));
                 startActivity(intent);
             }
         });
@@ -124,19 +123,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     // ---------------------------------------------------------------------------------------------
 
-    private void startSignIn(){
+    private void startSignIn() {
         String email = mEmail.getText().toString();
-        String password =mPassword.getText().toString();
-        if(TextUtils.isEmpty(email)) {
+        String password = mPassword.getText().toString();
+        if (TextUtils.isEmpty(email)) {
             Toast.makeText(MainActivity.this, "Email required", Toast.LENGTH_LONG).show();
-        }
-        else if(TextUtils.isEmpty(password)) {
+        } else if (TextUtils.isEmpty(password)) {
             Toast.makeText(MainActivity.this, "Password required", Toast.LENGTH_LONG).show();
-        }
-        else{
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        } else {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener < AuthResult > () {
                 @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
+                public void onComplete(@NonNull Task < AuthResult > task) {
                     if (!task.isSuccessful()) {
                         Toast.makeText(MainActivity.this, "Sign in problem", Toast.LENGTH_LONG).show();
                     }
@@ -160,12 +157,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     // get the result of the barcode back rom the BarcodeScanner
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 0){
-            if(resultCode == CommonStatusCodes.SUCCESS){
-                if(data!=null){
+        if (requestCode == 0) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
                     Barcode barcode = data.getParcelableExtra("barcode");
                     barcodeResult.setText("Barcode: " + barcode.displayValue);
-                }else{
+                } else {
                     barcodeResult.setText("No barcode detected from camera");
                 }
             }
@@ -180,5 +177,3 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 }
-
-
