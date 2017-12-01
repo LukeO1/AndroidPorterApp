@@ -26,8 +26,8 @@
 
         <TextView
             android:id="@+id/workListOriginView"
-            android:layout_width="252dp"
-            android:layout_height="30dp"
+            android:layout_width="241dp"
+            android:layout_height="33dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Origin"
@@ -37,8 +37,8 @@
 
         <TextView
             android:id="@+id/workListDestinationView"
-            android:layout_width="220dp"
-            android:layout_height="28dp"
+            android:layout_width="0dp"
+            android:layout_height="37dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -76,7 +76,7 @@
 
         <ImageView
             android:id="@+id/iconTimerView"
-            android:layout_width="wrap_content"
+            android:layout_width="31dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/workListDestinationView"

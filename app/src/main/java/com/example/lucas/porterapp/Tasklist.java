@@ -59,29 +59,111 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         setContentView(R.layout.activity_tasklist);
         getSupportActionBar().setTitle("Work List");
 
-        statusEdit("false"); //TEMP VALUE - must set value back to false and force user to release
-        // work items before sign out
+        // UnComment to refresh and populate the db with randomly generated tasks
+        // populateDatabase();
 
+        // Checks if a sharedPrefFile exist on the android device
+        checkIfSharedPrefFileExists();
 
+        // Connection to Firebase
+        mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
 
+        // Check if user already exist in db with a task accepted
+        checkIfUserExistInDB();
+
+        // Query DataBase for all tasks that are not already taken and populate the list
+        Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
+
+        // Populate WorkList with task from DB
+        listView = (ListView) findViewById(R.id.listview_worklist);
+        firebasePopulateView(queryRef);
+
+        // Spinner for filtering by ward
+        filterByWardSpinner();
+
+        // Click event for list items
+        listViewEventListener();
+
+        FloatingActionButton openPersonalActivity = (FloatingActionButton) findViewById(R.id.openPersonalWorklist);
+        openPersonalActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Tasklist.this, PersonalScreenActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Checks if the shared pref file exist to store the boolean value checkSelected. If not create it
+     */
+    public void checkIfSharedPrefFileExists(){
+        // Checks if a sharedPrefFile exist on the android device. Creates if not already exist
         boolean checkFileExists = Boolean.parseBoolean(statusCheck());
         if (!checkFileExists) {
             editor = getSharedPreferences(CHECK_STATUS, MODE_PRIVATE).edit();
             editor.putString("checkSelected", "false").apply();
         }
+    }
 
-        listView = (ListView) findViewById(R.id.listview_worklist);
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * This method checks the database to check the status of the user in the db. If the database has
+     * updated where the task if set back to No after 15. This method will set the checkSelected value
+     * to false to allow to task accepting again
+     */
+    public void checkIfUserExistInDB(){
 
+        // Query the DB for the specific instance of userID
+        Query queryRefCheck = mRef.orderByChild("userID").equalTo(getUserID());
+        readData(queryRefCheck, new OnGetDataListener() {
 
+            @Override
+            public void onSucess(DataSnapshot dataSnapshot) {
+                boolean checkSelected = Boolean.parseBoolean(statusCheck());
+                if (dataSnapshot.exists()){}
+                else {
+                    if(checkSelected){
+                        statusEdit("false");
+                    }
+                }
+            }
 
-        // Connection to Firebase
-        mRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/Tasks");
-        Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
-        firebasePopulateView(queryRef);
+            @Override
+            public void onStart() {}
 
-//        populateDatabase(); //UnComment to populate the db with randomly generated tasks
+            @Override
+            public void onFailure() {}
+        });
+    }
 
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Listeners for onGetDataListener interface methods. Returns when the task is finished or failed
+     * @param ref firebase query
+     * @param listener listener
+     */
+    public void readData(Query ref, final OnGetDataListener listener) {
+        listener.onStart();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {listener.onSucess(dataSnapshot);}
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {listener.onFailure();}
+        });
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Generates a spinner to help user filter through all item according to the ward selected.
+     * Updates the list per filter
+     */
+    public void filterByWardSpinner(){
+
+        // Spinner for filtering by ward
         firebaseFilterSpinner = (Spinner) findViewById(R.id.firebaseFilterSpinner);
         ArrayAdapter<CharSequence> SpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.firebase_filter_array, android.R.layout.simple_spinner_item);
@@ -90,58 +172,47 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
 
         firebaseFilterSpinner.setAdapter(SpinnerAdapter);
         firebaseFilterSpinner.setOnItemSelectedListener(this);
-
-//         Populate WorkList with task from DB
-        adapter = new FirebaseListAdapter<TaskInfo>(this, TaskInfo.class, R.layout.row_layout, queryRef){
-            @Override
-            protected void populateView(View v, TaskInfo model, int position) {
-
-                populateItemView(model, v);
-
-            }
-        };
-        listView.setAdapter(adapter);
-
+    }
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * Click event listener for each item in the list view. Expands the item on click to display
+     * more information per task
+     */
+    public void listViewEventListener(){
         // Click event for list items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, View view,
                                     final int position, long id) {
 
-            //Toast.makeText(Tasklist.this, "Item clicked, position: "+ position, Toast.LENGTH_SHORT).show();
-            subWorkListItem = (ConstraintLayout) view.findViewById(R.id.subWorkListItem);
-            toggleItem();
+                subWorkListItem = (ConstraintLayout) view.findViewById(R.id.subWorkListItem);
+                toggleItem(); // expands and contracts the listItem to show more or less info on click
 
-            Button subWorkListButtonsOK = (Button) view.findViewById(R.id.subWorkListButtonsOK);
-            Button subWorkListButtonsNO = (Button) view.findViewById(R.id.subWorkListButtonsNO);
+                Button subWorkListButtonsOK = (Button) view.findViewById(R.id.subWorkListButtonsOK);
+                Button subWorkListButtonsNO = (Button) view.findViewById(R.id.subWorkListButtonsNO);
 
-            TaskInfo x = (TaskInfo) listView.getItemAtPosition(position);
+                TaskInfo x = (TaskInfo) listView.getItemAtPosition(position);
 
-            buttonOnClickOK(subWorkListButtonsOK, position, x);
-            buttonOnClickNO(subWorkListButtonsNO, position);
+                // Event listeners for button Ok and No within the list
+                buttonOnClickOK(subWorkListButtonsOK, position, x);
+                buttonOnClickNO(subWorkListButtonsNO, position);
 
             }
         });
-
-        FloatingActionButton openPersonalActivity = (FloatingActionButton) findViewById(R.id.openPersonalWorklist);
-        openPersonalActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            Intent intent = new Intent(Tasklist.this, PersonalScreenActivity.class);
-            startActivity(intent);
-            }
-        });
-
     }
 
     // ---------------------------------------------------------------------------------------------
+    /**
+     * populate the work list view according to the query
+     * @param queryRef query for the database
+     */
     public void firebasePopulateView(Query queryRef) {
-
 
         adapter = new FirebaseListAdapter<TaskInfo>(this, TaskInfo.class, R.layout.row_layout, queryRef) {
             @Override
             protected void populateView(View v, TaskInfo model, int position) {
 
+                // call method to set specific values to TextViews
                 populateItemView(model,v);
             }
         };
@@ -150,6 +221,11 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
     }
 
 // -------------------------------------------------------------------------------------------------
+    /**
+     * Populate each item in the work list view
+     * @param model the task object to populate the item with
+     * @param v the View
+     */
     public void populateItemView(TaskInfo model, View v){
         Typeface font = Typeface.createFromAsset( getAssets(), "fontawesome-webfont.ttf" );
 
@@ -160,6 +236,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         TextView workListPatientIDView = (TextView) v.findViewById(R.id.workListPatientIDView);
         TextView workListTransportModeView = (TextView) v.findViewById(R.id.workListTransportModeView);
 
+        // icons
         String iconWheelchair = getString(R.string.icon_wheelchair);
         String iconBed = getString(R.string.icon_bed);
         String iconWalking = getString(R.string.icon_walking);
@@ -185,11 +262,14 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
 
         // Set icon colour for priority
         if(model.getPriority() == 1){
-            DrawableCompat.setTint(timerIcon.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.colourTimer1));
+            DrawableCompat.setTint(timerIcon.getDrawable(),
+                    ContextCompat.getColor(getApplicationContext(), R.color.colourTimer1));
         }else if(model.getPriority() == 2){
-            DrawableCompat.setTint(timerIcon.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.colourTimer2));
+            DrawableCompat.setTint(timerIcon.getDrawable(),
+                    ContextCompat.getColor(getApplicationContext(), R.color.colourTimer2));
         }else{
-            DrawableCompat.setTint(timerIcon.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.colourTimer3));
+            DrawableCompat.setTint(timerIcon.getDrawable(),
+                    ContextCompat.getColor(getApplicationContext(), R.color.colourTimer3));
         }
 
         workListOriginView.setTypeface(font);
@@ -207,7 +287,6 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
     }
 
 // -------------------------------------------------------------------------------------------------
-
     /**
      * Click event listener for Accept button
      *
@@ -225,29 +304,31 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         subWorkListButtonsOK.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-            // Retrieve checkSelected flag from shared preference
-            boolean checkSelected = Boolean.parseBoolean(statusCheck());
+                // Retrieve checkSelected flag from shared preference
+                boolean checkSelected = Boolean.parseBoolean(statusCheck());
 
-            if (!checkSelected) {
-                // Set userID field with userID and change inProgress value to yes
-                mRef.child(itemKey).child("userID").setValue(getUserID());
-                mRef.child(itemKey).child("inProgress").setValue("YES");
-                mRef.child(itemKey).child("searchValue").setValue(taskInfo.getWard()+"_YES");
+                if (!checkSelected) {
 
-                // Change checkSelected flag in shared preference to true
-                statusEdit("true");
+                    // Set userID field with userID and change inProgress value to yes
+                    mRef.child(itemKey).child("userID").setValue(getUserID());
+                    mRef.child(itemKey).child("inProgress").setValue("YES");
+                    mRef.child(itemKey).child("searchValue").setValue(taskInfo.getWard()+"_YES");
+                    mRef.child(itemKey).child("inProgressSince").setValue(System.currentTimeMillis());
 
-                // Pass WorkList object to personalHomepage Activity and start Activity
-                Intent i = new Intent(Tasklist.this, PersonalScreenActivity.class).
-                        putExtra("taskObject", taskInfo);
-                startActivity(i);
+                    // Change checkSelected flag in shared preference to true
+                    statusEdit("true");
 
-            } else {
-                //Display error message to User
-                Toast.makeText(Tasklist.this, "Please complete or cancel current task before " +
-                        "accepting a new task", Toast.LENGTH_LONG).show();
-            }
-            toggleItem();
+                    // Pass WorkList object to personalHomepage Activity and start Activity
+                    Intent i = new Intent(Tasklist.this, PersonalScreenActivity.class).
+                            putExtra("taskObject", taskInfo);
+                    startActivity(i);
+
+                } else {
+                    //Display error message to User
+                    Toast.makeText(Tasklist.this, "Please complete or cancel current task before " +
+                            "accepting a new task", Toast.LENGTH_LONG).show();
+                }
+                toggleItem();
             }
         });
     }
@@ -267,12 +348,10 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
     }
-
 // ---------------------------------------------------------------------------------------------
 
     /**
      * Retrieves user specific ID from Firebase Authentication
-     *
      * @return User Id of User
      */
     public String getUserID() {
@@ -301,7 +380,6 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
 // -------------------------------------------------------------------------------------------------
     /**
      * Check the variable stored in a shared preference file if the User has already accepted a Task
-     *
      * @return true if User has already accepted a task, false if not, or not found if file could
      * not be found.
      */
@@ -359,31 +437,12 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
 
         return true;
     }
-// -------------------------------------------------------------------------------------------------
-
-    public void copyRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
-        fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError firebaseError, DatabaseReference firebase) {
-                        if (firebaseError != null) {
-                            System.out.println("Copy failed");
-                        } else {
-                            System.out.println("Success");
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-            }
-        });
-    }
 
     // ---------------------------------------------------------------------------------------------
+    /**
+     * This method helps the filter spinner requests data from the database and populates the list
+     * view accordingly
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String filterSelected = firebaseFilterSpinner.getSelectedItem().toString();

@@ -58,7 +58,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     private Button inProgressCameraButton, inProgressConfirmTaskButton;
     private boolean flag;
     private String currentPatientID = null;
-    ViewFlipper inProgressViewFlipper;
+    private ViewFlipper inProgressViewFlipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +116,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
 
     }
 
+    // ---------------------------------------------------------------------------------------------
     /**
      * Checks the pedometer count value and updates the text field
      */
@@ -127,6 +128,9 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     }
 
     // -------------------------------------------------------------------------------------------------
+    /**
+     * Initialise all views needed after
+     */
     public void initializeInProgressViews(){
         // Initialize views used in code
         View inProgressTextViewHolder = findViewById(R.id.InProgressTextViewHolder);
@@ -158,6 +162,10 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     }
 
     // -------------------------------------------------------------------------------------------------
+    /**
+     * Populate the inProgres view
+     * @param xTask the task to populate the view with
+     */
     public void populateInProgressView(TaskInfo xTask){
 
         Typeface font = Typeface.createFromAsset( getAssets(), "fontawesome-webfont.ttf" );
@@ -201,7 +209,9 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         inProgressDestinationView.setTypeface(font);
     }
 // -------------------------------------------------------------------------------------------------
-
+    /**
+     * click event listener for ID scanning button
+     */
     public void idScannerLauncher() {
         // launches the barcode scanner
 
@@ -213,7 +223,10 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     }
 
     // ---------------------------------------------------------------------------------------------
-
+    /**
+     * Checks if user has a task, if yes display the task, if not flip to a another layout that
+     * displays a message of none in progress
+     */
     public void confirmTaskButtonListener() {
 
         inProgressConfirmTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -254,7 +267,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         String timeStampCompleted = currentTime;
         String timeTaken = task.getMinutes();
         String userID = task.getUserID();
-//        myDB.deleteAll(); //Clear the DB
+
 
         //insert data into the DB
         boolean result = myDB.insertDataCompleted(taskId, wardName, patientName, destination,
@@ -278,8 +291,6 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
                     taskInfo = child.getValue(TaskInfo.class);
                     if(flag){
                         populateInProgressView(taskInfo);
-//                        inProgressTextViewMain.setText(taskInfo.getWard() + " " +
-//                                taskInfo.getPatientName() + " " + taskInfo.getDestination());
                     }
                 }
             }
@@ -351,7 +362,10 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     }
 
     // ---------------------------------------------------------------------------------------------
-
+    /**
+     * Populate the completed list view with tasks stored in the local SQLite database
+     * @param orderBy
+     */
     public void populateList(String orderBy){
         // populates the completed task list by the orderBy value
         CursorAdapter adapter;
@@ -450,7 +464,10 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
         return true;
     }
 
-    // -------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * AsynTask handler for returning task from the db.
+     */
     class RespondOnFinish extends AsyncTask<Void, Void, Void> {
 
         @Override
