@@ -449,7 +449,7 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         Context context = getApplicationContext();
 
         switch (filterSelected) {
-            case ("View All"): {
+            case ("↓ View by Ward ↓"): {
                 Query queryRef = mRef.orderByChild("inProgress").equalTo("NO");
                 firebasePopulateView(queryRef);
                 break;
