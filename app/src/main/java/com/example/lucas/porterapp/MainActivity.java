@@ -2,8 +2,6 @@ package com.example.lucas.porterapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -17,15 +15,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+/**
+ * Activity that is displayed when the app is launched.
+ */
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     //public class MainActivity extends AppCompatActivity{
@@ -37,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private DatabaseHelper myDB;
 
-
-    private TextView barcodeResult;
     ImageView imgClick;
 
     // ---------------------------------------------------------------------------------------------
@@ -143,37 +140,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     // ---------------------------------------------------------------------------------------------
-
-    // called to initiate the barcode scanning
-    public void scanBarcode(View v) {
-        Intent intent = new Intent(this, BarcodeScanner.class);
-
-        // receives the result from the BarcodeScanner activity
-        startActivityForResult(intent, 0);
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    // get the result of the barcode back rom the BarcodeScanner
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0) {
-            if (resultCode == CommonStatusCodes.SUCCESS) {
-                if (data != null) {
-                    Barcode barcode = data.getParcelableExtra("barcode");
-                    barcodeResult.setText("Barcode: " + barcode.displayValue);
-                } else {
-                    barcodeResult.setText("No barcode detected from camera");
-                }
-            }
-        }
-
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
 
 
 }

@@ -19,7 +19,6 @@
 
 
     <string-array name="sort_by_array">
-        <item>Patient ID</item>
         <item>Patient Name</item>
         <item>Task ID</item>
         <item>Destination</item>
