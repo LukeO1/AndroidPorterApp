@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 public class About extends AppCompatActivity {
@@ -57,17 +58,18 @@ public class About extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.menu_contacts:
+                intent = new Intent(this, PhoneDirectory.class);
+                startActivity(intent);
                 break;
             case R.id.menu_settings:
                 intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
-            //            case R.id.menu_sign_out:
-            //                Toast.makeText(this, "Sign Out", Toast.LENGTH_LONG).show();
-            //                (MainActivity.mAuth).getInstance().signOut();
-            //                startActivity(new Intent(this, MainActivity.class));
-            //                finish();
-            //                break;
+            case R.id.menu_about:
+                (MainActivity.mAuth).getInstance().signOut();
+                startActivity(new Intent(this, About.class));
+                finish();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
