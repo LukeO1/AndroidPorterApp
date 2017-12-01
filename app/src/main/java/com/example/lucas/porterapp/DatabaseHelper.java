@@ -43,14 +43,23 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         db.execSQL("create table " + TABLE_PEDOMETER + "( ID INTEGER PRIMARY KEY AUTOINCREMENT, STEPS_TAKEN INTEGER);");
 //        System.out.println("DB ONCREATE!");
-
     }
 
     public void startPedoCount(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(STEPS_TAKEN, 0);
-        db.insert(TABLE_PEDOMETER, null, contentValues);
+        SQLiteDatabase db = this.getReadableDatabase();
+        String count = "SELECT count(*) FROM " + TABLE_PEDOMETER;
+        Cursor cursor = db.rawQuery(count, null);
+        cursor.moveToFirst();
+        int rowCount = cursor.getInt(0);
+        System.out.println("ROW COUNT: " + rowCount);
+        if(rowCount > 0) {
+            // ignore
+        }
+        else {
+            // populate table
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(STEPS_TAKEN, 0);
+            db.insert(TABLE_PEDOMETER, null, contentValues);
 //        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_COMPLETED_TASKS + " ORDER BY " + orderBy + " DESC" , null); //Select all from db
 //        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
 //        String[] aaa = cursor.getColumnNames();
@@ -60,10 +69,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 //        System.out.println(cursor.getColumnIndex("STEPS_TAKEN"));
 //        cursor.moveToFirst();
 //        System.out.println(cursor.getInt(2));
+        }
 
     }
 
     public int getSteps(){
+        startPedoCount();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
         cursor.moveToFirst();
@@ -88,8 +99,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPLETED_TASKS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PEDOMETER);
         onCreate(db);
-        startPedoCount();
-
     }
 
 // -------------------------------------------------------------------------------------------------
