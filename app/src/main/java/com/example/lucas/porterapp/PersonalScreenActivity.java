@@ -64,7 +64,7 @@ public class PersonalScreenActivity extends AppCompatActivity implements Adapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_screen);
-        getSupportActionBar().setTitle("Personal Work List");
+        getSupportActionBar().setTitle("Porter Profile");
 
         initializeInProgressViews();
 

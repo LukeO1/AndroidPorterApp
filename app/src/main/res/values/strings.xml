@@ -28,7 +28,7 @@
     </string-array>
 
     <string-array name="firebase_filter_array">
-        <item>View All</item>
+        <item>↓ View by Ward ↓</item>
         <item>St. John Ward</item>
         <item>Helens Ward</item>
         <item>Herbert Ward</item>
