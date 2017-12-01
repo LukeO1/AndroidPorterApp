@@ -11,60 +11,41 @@ import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Button;
+
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class PhoneDirectory extends AppCompatActivity {
-    private ListView phoneDirectory;
-    private DatabaseReference phoneDirectoryDatabase;
 
+
+public class About extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone_directory);
+        setContentView(R.layout.about);
 
-        getSupportActionBar().setTitle("Phone Directory");
+        Button but1=(Button)findViewById(R.id.suggestionbutton);
 
-        // reference listview in xml
-        phoneDirectory = (ListView)findViewById(R.id.listview_phone_directory);
-
-        // connect to phone directory table in firebase
-        phoneDirectoryDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://porterapp-3178d.firebaseio.com/phoneDirectory");
-
-        // pass the object class, layout xml and database reference to firebase
-        ListAdapter adapter = new FirebaseListAdapter<PhoneDirectoryInfo>(this, PhoneDirectoryInfo.class, R.layout.listview_phone_directory, phoneDirectoryDatabase) {
+        but1.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected void populateView(View v, final PhoneDirectoryInfo model, int position) {
+            public void onClick(View v) {
 
-                // link to xml
-                TextView phoneDirectoryWard = (TextView) v.findViewById(R.id.wardName);
-                TextView phoneDirectoryWardFloor = (TextView) v.findViewById(R.id.floorNumber);
-                ImageButton wardPhoneButton = (ImageButton) v.findViewById(R.id.callButton);
-
-
-                // use the getter methods to populate the listview
-                phoneDirectoryWard.setText(model.getWardName());
-                phoneDirectoryWardFloor.setText("Floor: " + model.getFloorNumber());
-
-                // launches the phone application when the call button is clicked
-                wardPhoneButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-                        intent.setData(Uri.parse("tel:" + model.getPhoneNumber()));
-                        startActivity(intent);
-                    }
-                });
-
-                };
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "dev@portassist.com" });
+                intent.putExtra(Intent.EXTRA_SUBJECT, "App FeedBack");
+                intent.putExtra(Intent.EXTRA_TEXT, "Your Comments: ");
+                startActivity(Intent.createChooser(intent, ""));
+            }
+        });
 
 
-        };
-        phoneDirectory.setAdapter(adapter);
+
+
+
 
     }
 
@@ -106,4 +87,5 @@ public class PhoneDirectory extends AppCompatActivity {
 
         return true;
     }
+
 }

@@ -29,23 +29,19 @@ public class Dropdown extends AppCompatActivity {
         Intent intent;
         switch(item.getItemId()) {
             case R.id.menu_tasklist:
-                Toast.makeText(this, "Tasklist", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, Tasklist.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.menu_my_page:
-                Toast.makeText(this, "My Page", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, PersonalScreenActivity.class);
                 startActivity(intent);
                 break;
             case R.id.menu_contacts:
-                Toast.makeText(this, "Contacts", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, PhoneDirectory.class);
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                Toast.makeText(this, "Dropdown", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;

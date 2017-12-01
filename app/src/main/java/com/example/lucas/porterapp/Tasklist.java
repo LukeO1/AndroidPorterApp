@@ -341,23 +341,22 @@ public class Tasklist extends AppCompatActivity implements AdapterView.OnItemSel
         Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_tasklist:
-                Toast.makeText(this, "Tasklist", Toast.LENGTH_LONG).show();
                 break;
             case R.id.menu_my_page:
-                Toast.makeText(this, "My Page", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, PersonalScreenActivity.class);
                 startActivity(intent);
                 break;
             case R.id.menu_contacts:
-                Toast.makeText(this, "Contacts", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, PhoneDirectory.class);
                 startActivity(intent);
                 break;
             case R.id.menu_settings:
-                Toast.makeText(this, "Dropdown", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
+            case R.id.menu_about:
+                startActivity(new Intent(this, About.class));
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }

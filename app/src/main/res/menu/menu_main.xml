@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Tasklist" android:id="@+id/menu_tasklist"></item>
-    <item android:title="My Page" android:id="@+id/menu_my_page"></item>
+    <item android:title="Work List" android:id="@+id/menu_tasklist"></item>
+    <item android:title="Porter Profile" android:id="@+id/menu_my_page"></item>
     <item android:title="Contacts" android:id="@+id/menu_contacts"></item>
     <item android:title="Security" android:id="@+id/menu_settings"></item>
+    <item android:title="About" android:id="@+id/menu_about"></item>
+
 </menu>

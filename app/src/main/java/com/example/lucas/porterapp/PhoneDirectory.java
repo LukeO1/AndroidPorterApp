@@ -80,30 +80,25 @@ public class PhoneDirectory extends AppCompatActivity {
         Intent intent;
         switch(item.getItemId()) {
             case R.id.menu_tasklist:
-                Toast.makeText(this, "Tasklist", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, Tasklist.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.menu_my_page:
-                Toast.makeText(this, "My Page", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, PersonalScreenActivity.class);
                 startActivity(intent);
                 break;
             case R.id.menu_contacts:
-                Toast.makeText(this, "Contacts", Toast.LENGTH_LONG).show();
                 break;
             case R.id.menu_settings:
-                Toast.makeText(this, "Dropdown", Toast.LENGTH_LONG).show();
                 intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
-//            case R.id.menu_sign_out:
-//                Toast.makeText(this, "Sign Out", Toast.LENGTH_LONG).show();
-//                (MainActivity.mAuth).getInstance().signOut();
-//                startActivity(new Intent(this, MainActivity.class));
-//                finish();
-//                break;
+            case R.id.menu_about:
+                Toast.makeText(this, "About", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, About.class));
+                finish();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

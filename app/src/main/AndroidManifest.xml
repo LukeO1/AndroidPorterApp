@@ -57,6 +57,9 @@
         <activity android:name=".PersonalScreenActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".About"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".Dropdown"></activity>
     </application>
 
