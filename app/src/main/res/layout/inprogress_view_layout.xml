@@ -58,7 +58,7 @@
     <TextView
         android:id="@+id/inProgressOriginView"
         android:layout_width="213dp"
-        android:layout_height="23dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="From"
@@ -69,7 +69,7 @@
     <TextView
         android:id="@+id/inProgressDestinationView"
         android:layout_width="0dp"
-        android:layout_height="18dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="To"
         android:textSize="18sp"
