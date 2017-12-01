@@ -33,6 +33,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, 5);
     }
 
+    /**
+     * Creates the database tables
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -42,16 +46,18 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 "TIMESTAMP_CREATED TEXT, TIMESTAMP_COMPLETED TEXT, TIMETAKEN TEXT, USER_ID TEXT);" );
 
         db.execSQL("create table " + TABLE_PEDOMETER + "( ID INTEGER PRIMARY KEY AUTOINCREMENT, STEPS_TAKEN INTEGER);");
-//        System.out.println("DB ONCREATE!");
     }
 
+    /**
+     * If it finds the pedometer table is empty it start the count at 0
+     */
     public void startPedoCount(){
         SQLiteDatabase db = this.getReadableDatabase();
         String count = "SELECT count(*) FROM " + TABLE_PEDOMETER;
         Cursor cursor = db.rawQuery(count, null);
         cursor.moveToFirst();
         int rowCount = cursor.getInt(0);
-        System.out.println("ROW COUNT: " + rowCount);
+//        System.out.println("ROW COUNT: " + rowCount);
         if(rowCount > 0) {
             // ignore
         }
@@ -60,40 +66,39 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             ContentValues contentValues = new ContentValues();
             contentValues.put(STEPS_TAKEN, 0);
             db.insert(TABLE_PEDOMETER, null, contentValues);
-//        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_COMPLETED_TASKS + " ORDER BY " + orderBy + " DESC" , null); //Select all from db
-//        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
-//        String[] aaa = cursor.getColumnNames();
-//        for(String a : aaa){
-//            System.out.println("Column: " + a);
-//        }
-//        System.out.println(cursor.getColumnIndex("STEPS_TAKEN"));
-//        cursor.moveToFirst();
-//        System.out.println(cursor.getInt(2));
+
         }
 
     }
 
+    /**
+     * Returns the int value of steps taken for pedometer feature
+     * @return
+     */
     public int getSteps(){
         startPedoCount();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
         cursor.moveToFirst();
-//        cursor.getColumnNames();
-//        System.out.println("NEW COUNT: " + cursor.getInt(2));
-//        return 1;
         return cursor.getInt(2);
     }
 
+    /**
+     * Increments step count for pedometer feature
+     */
     public void countStep(){
-//        System.out.println("COUNTED!!!!!");
         SQLiteDatabase db = this.getReadableDatabase();
         db.execSQL("UPDATE " + TABLE_PEDOMETER + " SET STEPS_TAKEN = STEPS_TAKEN + 1;");
-//        Cursor cursor = db.rawQuery("select id as _id,* from " + TABLE_PEDOMETER, null); //Select all from db
-//        cursor.moveToFirst();
-//        System.out.println("NEW COUNT: " + cursor.getInt(2));
+
 
     }
 
+    /**
+     * if app is updated, recreates DB tables.
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPLETED_TASKS);

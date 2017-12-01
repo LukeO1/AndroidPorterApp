@@ -71,16 +71,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 
-
+        // creates a database manager
         myDB = new DatabaseHelper(this);
-//        SQLiteDatabase newdb = db.getWritableDatabase();
+        //creates a sensor manager to access step detector
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        db.onCreate(newdb);
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        // creates Sensor to monitor steps for pedometer feature
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         if (countSensor != null) {
             sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
+    /**
+     * Listens for a step and calls DB method to add to pedometer count
+     */
     public void onSensorChanged(SensorEvent event) {
 //        System.out.println("!!!!!STEP!!!!!");
         myDB.countStep();
