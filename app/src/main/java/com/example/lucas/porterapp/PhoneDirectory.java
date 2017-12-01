@@ -98,12 +98,12 @@ public class PhoneDirectory extends AppCompatActivity {
                 intent = new Intent(this, settingspage.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_sign_out:
-                Toast.makeText(this, "Sign Out", Toast.LENGTH_LONG).show();
-                (MainActivity.mAuth).getInstance().signOut();
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                break;
+//            case R.id.menu_sign_out:
+//                Toast.makeText(this, "Sign Out", Toast.LENGTH_LONG).show();
+//                (MainActivity.mAuth).getInstance().signOut();
+//                startActivity(new Intent(this, MainActivity.class));
+//                finish();
+//                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

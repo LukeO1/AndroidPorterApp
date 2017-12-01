@@ -3,6 +3,5 @@
     <item android:title="Tasklist" android:id="@+id/menu_tasklist"></item>
     <item android:title="My Page" android:id="@+id/menu_my_page"></item>
     <item android:title="Contacts" android:id="@+id/menu_contacts"></item>
-    <item android:title="Settings" android:id="@+id/menu_settings"></item>
-    <item android:title="Sign Out" android:id="@+id/menu_sign_out"></item>
+    <item android:title="Security" android:id="@+id/menu_settings"></item>
 </menu>
