@@ -66,7 +66,6 @@ public class About extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.menu_about:
-                (MainActivity.mAuth).getInstance().signOut();
                 startActivity(new Intent(this, About.class));
                 finish();
                 break;
